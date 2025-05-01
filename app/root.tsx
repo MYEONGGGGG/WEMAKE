@@ -33,6 +33,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        {/* 정상일 경우, function App을 렌더링 함 */}
+        {/* 오류 발생 시, function ErrorBoundary를 렌더링 함 */}
         {children}
         <ScrollRestoration />
         <Scripts />
