@@ -3,6 +3,16 @@ export { Avatar, AvatarImage, AvatarFallback } from "~/common/components/ui/avat
 export { Button, buttonVariants } from "~/common/components/ui/button";
 
 export {
+    Card,
+    CardHeader,
+    CardFooter,
+    CardTitle,
+    CardAction,
+    CardDescription,
+    CardContent,
+} from "~/common/components/ui/card";
+
+export {
     DropdownMenu,
     DropdownMenuPortal,
     DropdownMenuTrigger,
