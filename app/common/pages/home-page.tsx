@@ -1,6 +1,7 @@
 import { Link, type MetaFunction } from "react-router";
-import { Button, Card, CardDescription, CardFooter, CardHeader, CardTitle } from "~/common/components";
-import { ChevronUpIcon, EyeIcon, MessageCircleIcon } from "lucide-react";
+import { Button } from "~/common/components";
+import { ProductCard } from "~/common/components/product-card";
+import { ArrowRightIcon } from "lucide-react";
 
 export const meta : MetaFunction = () => {
     return [
@@ -15,48 +16,31 @@ export default function HomePage() {
           <div className="grid grid-cols-3 gap-4">
               <div>
                   <h2 className="text-5xl font-bold leading-tight tracking-tight">
-                      Today's Products
+                      Latest Discussions
                   </h2>
                   <p className="text-xl font-light text-foreground">
-                      The best products made by our community today.
+                      The latest discussions from our community.
                   </p>
+                  <Button variant="link" asChild className="text-lg p-0">
+                      <Link to="/community">
+                          Explore All Products
+                          <ArrowRightIcon />
+                      </Link>
+                  </Button>
               </div>
 
-             {/* Product Card */}
-             <div className="">
-                 <Link to={`/products/productId`}>
-                     <Card className="w-full flex items-center justify-between bg-transparent hover:bg-card/50">
-                         <CardHeader>
-                             <CardTitle className="text-2xl font-semibold leading-none tracking-tight">
-                                 Product Name
-                             </CardTitle>
-
-                             <CardDescription className="text-muted-foreground">
-                                 Product Description
-                             </CardDescription>
-
-                             {/*<div className="flex items-center gap-4 mt-2">*/}
-                             {/*    <div className="flex items-center gap-px text-xs text-muted-foreground">*/}
-                             {/*        <MessageCircleIcon className="w-4 h-4" />*/}
-                             {/*        <span>12</span>*/}
-                             {/*    </div>*/}
-                             {/*    <div className="flex items-center gap-px text-xs text-muted-foreground">*/}
-                             {/*        <EyeIcon className="w-4 h-4" />*/}
-                             {/*        <span>12</span>*/}
-                             {/*    </div>*/}
-                             {/*</div>*/}
-                         </CardHeader>
-
-                         {/*<CardFooter className="py-0">*/}
-                         {/*    <Button variant="outline" className="flex flex-col h-14">*/}
-                         {/*        <ChevronUpIcon className="size-4 shrink-0" />*/}
-                         {/*        <span>120</span>*/}
-                         {/*    </Button>*/}
-                         {/*</CardFooter>*/}
-                     </Card>
-                 </Link>
-             </div>
-
+              {/* product card */}
+              {Array.from({ length: 10 }).map((_, i) => (
+                  <ProductCard
+                      key={i}
+                      id="productId"
+                      name="Product Name"
+                      description="Product Description"
+                      commentsCount={12}
+                      viewsCount={12}
+                      votesCount={120}
+                  />
+              ))}
           </div>
       </div>
     );
