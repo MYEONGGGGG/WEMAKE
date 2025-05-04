@@ -1,8 +1,20 @@
 import { Link, type MetaFunction } from "react-router";
-import { Button } from "~/common/components";
+import {
+    Button,
+    Badge,
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+    CardFooter,
+    Avatar,
+    AvatarImage, AvatarFallback
+} from "~/common/components";
 import { ProductCard } from "~/features/products/components/product-card";
 import { PostCard } from "~/features/community/components/post-card";
 import { IdeasCard } from "~/features/ideas/components/ideas-card";
+import { JobsCard } from "~/features/jobs/components/jobs-card";
+import { TeamCard } from "~/features/teams/team-card";
 
 export const meta : MetaFunction = () => {
     return [
@@ -103,6 +115,67 @@ export default function HomePage() {
                   />
               ))}
           </div>
+
+          {/* Jobs Card */}
+          <div className="grid grid-cols-4 gap-4">
+              <div>
+                  <h2 className="text-5xl font-bold leading-tight tracking-tight">
+                      Letest Jobs
+                  </h2>
+                  <p className="text-xl font-light text-foreground">
+                      Find your dream job.
+                  </p>
+                  <Button variant="link" asChild className="text-lg p-0 text-destructive">
+                      <Link to="/jobs">
+                          Explore All jobs &rarr;
+                      </Link>
+                  </Button>
+              </div>
+
+              {Array.from({ length: 11 }).map((_, index) => (
+                  <JobsCard
+                      key={index}
+                      id={`jobsId-${index}`}
+                      company="Tesla"
+                      companyLogoUrl="https://github.com/teslamotors.png"
+                      companyHq="San Francisco, CA"
+                      title="Software Engineer"
+                      positionLocation="Remote"
+                      postedAt="12 hours ago"
+                      type="Full-time"
+                      salary="$100,000 - $120,000"
+                  />
+              ))}
+          </div>
+
+          {/* Team Card */}
+          <div className="grid grid-cols-4 gap-4">
+              <div>
+                  <h2 className="text-5xl font-bold leading-tight tracking-tight">
+                      Find a Team mate
+                  </h2>
+                  <p className="text-xl font-light text-foreground">
+                      Join a team looking for a new member.
+                  </p>
+                  <Button variant="link" asChild className="text-lg p-0 text-destructive">
+                      <Link to="/teams">
+                          Explore All teams &rarr;
+                      </Link>
+                  </Button>
+              </div>
+
+              {Array.from({ length: 7 }).map((_, index) => (
+                  <TeamCard
+                      key={index}
+                      id={`teamId-${index}`}
+                      leaderUsername="@lynn"
+                      leaderAvatarUrl="https://github.com/inthetiger.png"
+                      positions={["React Developer", "Backend Developer", "Product Manager"]}
+                      projectsDescription="a new social media platform"
+                  />
+              ))}
+          </div>
+
       </div>
     );
 }
