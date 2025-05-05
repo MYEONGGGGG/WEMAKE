@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import type { Route } from "./+types/leaderboard-page";
+import type { Route } from "./+types/daily-leaderboard-page";
 import { data, isRouteErrorResponse, Link } from "react-router";
 import { z } from "zod";
 import { Hero } from "~/common/components/hero";
