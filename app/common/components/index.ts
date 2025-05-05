@@ -44,3 +44,13 @@ export {
 } from "~/common/components/ui/navigation-menu";
 
 export { Separator } from "~/common/components/ui/separator";
+
+export {
+    Pagination,
+    PaginationContent,
+    PaginationLink,
+    PaginationItem,
+    PaginationPrevious,
+    PaginationNext,
+    PaginationEllipsis,
+} from "~/common/components/ui/pagination";

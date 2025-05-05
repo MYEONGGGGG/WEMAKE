@@ -1,16 +1,20 @@
 import { DateTime } from "luxon";
 import type { Route } from "./+types/leaderboard-page";
-import { data, isRouteErrorResponse } from "react-router";
+import { data, isRouteErrorResponse, Link } from "react-router";
 import { z } from "zod";
+import { Hero } from "~/common/components/hero";
+import { ProductCard } from "~/features/products/components/product-card";
+import { Button } from "~/common/components";
+import ProductPagination from "~/common/components/product-pagination";
 
 const paramsSchema = z.object({
-    year: z.number(),
-    month: z.number(),
-    day: z.number(),
+    year: z.coerce.number(),
+    month: z.coerce.number(),
+    day: z.coerce.number(),
 });
 
 export const loader = ({ params }: Route.LoaderArgs) => {
-    const { success, data:parsedData } = paramsSchema.safeParse(params);
+    const { success, data: parsedData } = paramsSchema.safeParse(params);
     if (!success) {
         throw data(
             {
@@ -22,15 +26,15 @@ export const loader = ({ params }: Route.LoaderArgs) => {
     }
 
     const date = DateTime.fromObject(parsedData).setZone("Asia/Seoul");
-
     if (!date.isValid) {
-        throw new Error("Invalid date");
         throw data(
             {
-                error_code: "Invalid date",
+                error_code: "invalid_date",
                 message: "Invalid date",
             },
-            { status: 400 },
+            {
+                status: 400,
+            }
         );
     }
     const today = DateTime.now().setZone("Asia/Seoul").startOf("day");
@@ -44,16 +48,55 @@ export const loader = ({ params }: Route.LoaderArgs) => {
         )
     }
     return {
-        date,
+        ...parsedData,
     }
 };
 
-export default function DailyLeaderboardPage() {
+export default function DailyLeaderboardPage({ loaderData }: Route.ComponentProps) {
+    const urlDate = DateTime.fromObject({
+        year: loaderData.year,
+        month: loaderData.month,
+        day: loaderData.day,
+    });
+    const previousDay = urlDate.minus({ days: 1 });
+    const nextDay = urlDate.plus({ days: 1 });
+    const isToday = urlDate.equals(DateTime.now().startOf("day"));
+
     return (
-        <div className="container mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold mb-6">
-                {/*Top Products of {loaderData.month}/{loaderData.day}/{loaderData.year}*/}
-            </h1>
+        <div className="space-y-10">
+            <Hero
+                title={`The best products of ${urlDate.toLocaleString(
+                    DateTime.DATE_MED
+                )}`}
+            />
+            <div className="flex items-center justify-center gap-2">
+                <Button variant="secondary" asChild>
+                    <Link to={`/products/leaderboards/daily/${previousDay.year}/${previousDay.month}/${previousDay.day}`}>
+                        &larr; {previousDay.toLocaleString(DateTime.DATE_SHORT)}
+                    </Link>
+                </Button>
+                {!isToday ? (
+                    <Button variant="secondary" asChild>
+                        <Link to={`/products/leaderboards/daily/${nextDay.year}/${nextDay.month}/${nextDay.day}`}>
+                            {nextDay.toLocaleString(DateTime.DATE_SHORT)} &rarr;
+                        </Link>
+                    </Button>
+                ) : null}
+            </div>
+            <div className="space-y-5 w-full max-w-screen-md mx-auto">
+                {Array.from({ length: 11 }).map((_, index) => (
+                    <ProductCard
+                        key={index}
+                        id={`productId-${index}`}
+                        name="Product Name"
+                        description="Product Description"
+                        commentsCount={12}
+                        viewsCount={12}
+                        votesCount={120}
+                    />
+                ))}
+            </div>
+            <ProductPagination totalPages={10} />
         </div>
     );
 }
