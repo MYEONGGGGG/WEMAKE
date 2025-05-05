@@ -1,15 +1,5 @@
 import { Link, type MetaFunction } from "react-router";
-import {
-    Button,
-    Badge,
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-    CardFooter,
-    Avatar,
-    AvatarImage, AvatarFallback
-} from "~/common/components";
+import { Button } from "~/common/components";
 import { ProductCard } from "~/features/products/components/product-card";
 import { PostCard } from "~/features/community/components/post-card";
 import { IdeasCard } from "~/features/ideas/components/ideas-card";
