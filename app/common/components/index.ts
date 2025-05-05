@@ -31,6 +31,8 @@ export {
     DropdownMenuSubContent,
 } from "~/common/components/ui/dropdown-menu";
 
+export { Input } from "~/common/components/ui/input";
+
 export {
     NavigationMenu,
     NavigationMenuList,
