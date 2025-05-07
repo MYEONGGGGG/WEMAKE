@@ -1,4 +1,4 @@
-import { type RouteConfig, index, prefix, route } from "@react-router/dev/routes";
+import { type RouteConfig, index, prefix, layout, route } from "@react-router/dev/routes";
 
 /**
  * routes.ts 파일은 React router가 웹사이트에 어떤 페이지가 있는지 확인하는 곳(사용자가 이동할 수 있는 URL)
@@ -44,13 +44,15 @@ export default [
         route("/promote", "features/products/pages/promote-page.tsx"),
         ...prefix("/:productId", [
             index("features/products/pages/product-redirect-page.tsx"),
-            route(
-                "/overview",
-                "features/products/pages/product-overview-page.tsx"
-            ),
-            ...prefix("/reviews", [
-                index("features/products/pages/product-reviews-page.tsx"),
-                route("/new", "features/products/pages/new-product-review-page.tsx"),
+            layout("features/products/layouts/product-overview-layout.tsx", [
+                route(
+                    "/overview",
+                    "features/products/pages/product-overview-page.tsx"
+                ),
+                ...prefix("/reviews", [
+                    index("features/products/pages/product-reviews-page.tsx"),
+                    route("/new", "features/products/pages/new-product-review-page.tsx"),
+                ]),
             ]),
         ]),
     ])
