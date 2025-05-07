@@ -1,5 +1,6 @@
 import type { Route } from "./+types/product-overview-page";
 import { ChevronUpIcon, StarIcon } from "lucide-react";
+import { Link } from "react-router";
 import { Button } from "~/common/components";
 
 export function  meta() {
@@ -9,7 +10,9 @@ export function  meta() {
     ];
 }
 
-export default function ProductOverviewPage() {
+export default function ProductOverviewPage({
+    params: { productId },
+}: Route.ComponentProps) {
     return (
       <div className="space-y-10">
           {/* header */}
@@ -52,8 +55,12 @@ export default function ProductOverviewPage() {
 
           {/**/}
           <div className="flex gap-2.5">
-              <Button variant={"outline"}>Overview</Button>
-              <Button variant={"outline"}>Reviews</Button>
+              <Button variant={"outline"} asChild>
+                  <Link to={`/products/${productId}/overview`}>Overview</Link>
+              </Button>
+              <Button variant={"outline"} asChild>
+                  <Link to={`/products/${productId}/reviews`}>Reviews</Link>
+              </Button>
           </div>
 
           {/**/}
