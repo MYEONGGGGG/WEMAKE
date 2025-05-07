@@ -84,8 +84,6 @@ export default [
                 ...prefix("/reviews", [
                     // 리뷰 목록
                     index("features/products/pages/product-reviews-page.tsx"),
-                    // 새 리뷰 작성 페이지
-                    route("/new", "features/products/pages/new-product-review-page.tsx"),
                 ]),
             ]),
         ]),

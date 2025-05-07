@@ -15,6 +15,19 @@ export {
 export { Calendar } from "~/common/components/ui/calendar";
 
 export {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogOverlay,
+    DialogPortal,
+    DialogTitle,
+    DialogTrigger,
+} from "~/common/components/ui/dialog";
+
+export {
     DropdownMenu,
     DropdownMenuPortal,
     DropdownMenuTrigger,
