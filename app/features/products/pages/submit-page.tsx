@@ -3,6 +3,8 @@ import { Hero } from "~/common/components/hero";
 import { Form } from "react-router";
 import InputPair from "~/common/components/input-pair";
 import SelectPair from "~/common/components/select-pair";
+import { Button, Input, Label } from "~/common/components";
+import { useState } from "react";
 
 export const meta : Route.MetaFunction = () => {
     return [
@@ -12,6 +14,15 @@ export const meta : Route.MetaFunction = () => {
 }
 
 export default function SubmitPage({ loaderData }: Route.ComponentProps) {
+    const [icon, setIcon] = useState<string | null>(null);
+    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            const file = event.target.files[0];
+            // browser image url 생성
+            setIcon(URL.createObjectURL(file));
+        }
+    };
+
     return (
         <div>
             <Hero
@@ -19,6 +30,7 @@ export default function SubmitPage({ loaderData }: Route.ComponentProps) {
                 subtitle="Share your product with the world"
             />
             <Form className="grid md:grid-cols-2 gap-10 max-w-screen-lg mx-auto">
+                {/* Left */}
                 <div className="space-y-5 order-1 md:order-0">
                     <InputPair
                         label="Name"
@@ -69,6 +81,42 @@ export default function SubmitPage({ loaderData }: Route.ComponentProps) {
                             { value: "3", label: "Category 3" },
                         ]}
                     />
+                    <Button type="submit" className="w-full" size="lg">Submit</Button>
+                </div>
+
+                {/* Right */}
+                <div className="flex flex-col space-y-2">
+                    {/* preview */}
+                    <div className="size-40 rounded-xl shadow-xl">
+                        {icon ? (
+                            <img src={icon} alt="icon" className="object-cover w-full h-full" />
+                        ) : null}
+                    </div>
+                    {/* Choose image file */}
+                    <Label className="flex flex-col gap-1">
+                        Icon
+                    </Label>
+                    <small className="text-muted-foreground">
+                        This is the icon of your product.
+                    </small>
+                    <Input
+                        type="file"
+                        name="icon"
+                        className="max-w-1/2"
+                        onChange={onChange}
+                        required
+                    />
+                    <div className="flex flex-col text-xs">
+                        <span className="text-muted-foreground">
+                            Recommended size: 128x128px
+                        </span>
+                        <span className="text-muted-foreground">
+                            Allowed formats: PNG, JPEG
+                        </span>
+                        <span className="text-muted-foreground">
+                            Max file size: 1MB
+                        </span>
+                    </div>
                 </div>
             </Form>
         </div>
