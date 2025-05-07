@@ -26,7 +26,7 @@ export default function HomePage() {
                   <p className="text-xl font-light text-foreground">
                       The best products made by our community today.
                   </p>
-                  <Button variant="link" asChild className="text-lg p-0 text-destructive">
+                  <Button variant="link" asChild className="text-lg p-0">
                       <Link to="/products/leaderboards">
                           Explore all products &rarr;
                       </Link>
@@ -54,7 +54,7 @@ export default function HomePage() {
                   <p className="text-xl font-light text-foreground">
                       The latest discussions from our community.
                   </p>
-                  <Button variant="link" asChild className="text-lg p-0 text-destructive">
+                  <Button variant="link" asChild className="text-lg p-0">
                       <Link to="/community">
                           Explore All Products &rarr;
                       </Link>
@@ -83,7 +83,7 @@ export default function HomePage() {
                   <p className="text-xl font-light text-foreground">
                       Find ideas for your next project.
                   </p>
-                  <Button variant="link" asChild className="text-lg p-0 text-destructive">
+                  <Button variant="link" asChild className="text-lg p-0">
                       <Link to="/ideas">
                           Explore All ideas &rarr;
                       </Link>
@@ -115,7 +115,7 @@ export default function HomePage() {
                   <p className="text-xl font-light text-foreground">
                       Find your dream job.
                   </p>
-                  <Button variant="link" asChild className="text-lg p-0 text-destructive">
+                  <Button variant="link" asChild className="text-lg p-0">
                       <Link to="/jobs">
                           Explore All jobs &rarr;
                       </Link>
@@ -147,7 +147,7 @@ export default function HomePage() {
                   <p className="text-xl font-light text-foreground">
                       Join a team looking for a new member.
                   </p>
-                  <Button variant="link" asChild className="text-lg p-0 text-destructive">
+                  <Button variant="link" asChild className="text-lg p-0">
                       <Link to="/teams">
                           Explore All teams &rarr;
                       </Link>

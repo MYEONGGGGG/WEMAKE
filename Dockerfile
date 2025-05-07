@@ -11,7 +11,7 @@ COPY package*.json ./
 RUN npm install
 
 # 전체 프로젝트 복사 (실제 실행 시엔 볼륨 마운트로 덮어씀)
-COPY ../../Downloads .
+COPY . .
 
 # 포트 개방 (Vite 기본 포트)
 EXPOSE 5173

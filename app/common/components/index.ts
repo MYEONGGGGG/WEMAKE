@@ -12,6 +12,7 @@ export {
     CardDescription,
     CardContent,
 } from "~/common/components/ui/card";
+export { Calendar } from "~/common/components/ui/calendar";
 
 export {
     DropdownMenu,

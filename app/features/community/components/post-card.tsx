@@ -38,7 +38,7 @@ export function PostCard({
                     </div>
                 </CardHeader>
                 <CardFooter className="flex justify-end">
-                    <Button variant="link" asChild className="text-destructive">
+                    <Button variant="link" asChild>
                         Reply &rarr;
                     </Button>
                 </CardFooter>

@@ -39,7 +39,7 @@ export function TeamCard({
                         </Badge>
                         <span>is Looking for</span>
                         {positions.map((position, index) => (
-                            <Badge key={index} className="text-base bg-destructive">
+                            <Badge key={index} className="text-base">
                                 {position}
                             </Badge>
                         ))}
@@ -48,7 +48,7 @@ export function TeamCard({
                     </CardTitle>
                 </CardHeader>
                 <CardFooter className="justify-end">
-                    <Button variant="link" asChild className="text-destructive">
+                    <Button variant="link" asChild>
                         Join team &rarr;
                     </Button>
                 </CardFooter>

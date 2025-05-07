@@ -40,7 +40,7 @@ export default function LeaderboardPage({ loaderData }: Route.ComponentProps) {
                         votesCount={120}
                     />
                 ))}
-                <Button variant="link" asChild className="text-lg p-0 self-center text-destructive">
+                <Button variant="link" asChild className="text-lg p-0 self-center">
                     <Link to="/products/leaderboards/daily">
                         Explore all products &rarr;
                     </Link>
@@ -68,7 +68,7 @@ export default function LeaderboardPage({ loaderData }: Route.ComponentProps) {
                         votesCount={120}
                     />
                 ))}
-                <Button variant="link" asChild className="text-lg p-0 self-center text-destructive">
+                <Button variant="link" asChild className="text-lg p-0 self-center">
                     <Link to="/products/leaderboards/weekly">
                         Explore all products &rarr;
                     </Link>
@@ -96,7 +96,7 @@ export default function LeaderboardPage({ loaderData }: Route.ComponentProps) {
                         votesCount={120}
                     />
                 ))}
-                <Button variant="link" asChild className="text-lg p-0 self-center text-destructive">
+                <Button variant="link" asChild className="text-lg p-0 self-center">
                     <Link to="/products/leaderboards/monthly">
                         Explore all products &rarr;
                     </Link>
@@ -124,7 +124,7 @@ export default function LeaderboardPage({ loaderData }: Route.ComponentProps) {
                         votesCount={120}
                     />
                 ))}
-                <Button variant="link" asChild className="text-lg p-0 self-center text-destructive">
+                <Button variant="link" asChild className="text-lg p-0 self-center">
                     <Link to="/products/leaderboards/yearly">
                         Explore all products &rarr;
                     </Link>
