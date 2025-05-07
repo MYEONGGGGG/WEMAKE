@@ -87,5 +87,12 @@ export default [
                 ]),
             ]),
         ]),
-    ])
+    ]),
+
+    // "/ideas" 그룹 라우팅
+    ...prefix("/ideas", [
+        index("features/ideas/pages/ideas-page.tsx"),
+        route("/:ideaId", "features/ideas/pages/idea-page.tsx"),
+    ]),
+
 ] satisfies RouteConfig;

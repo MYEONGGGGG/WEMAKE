@@ -13,7 +13,7 @@ interface IdeasCardProps {
     claimed?: boolean;
 }
 
-export function IdeasCard({
+export function IdeaCard({
     id,
     title,
     viewsCount,
@@ -37,10 +37,10 @@ export function IdeasCard({
                 </Link>
             </CardHeader>
             <CardContent className="flex items-center text-sm">
-                      <span className="flex items-center gap-1">
-                          <EyeIcon className="w-4 h-4"/>
-                          <span>{viewsCount}</span>
-                      </span>
+                <div className="flex items-center gap-1">
+                    <EyeIcon className="w-4 h-4"/>
+                    <span>{viewsCount}</span>
+                </div>
                 <DotIcon className="w-4 h-4" />
                 <span>{postedAt}</span>
             </CardContent>

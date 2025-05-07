@@ -2,7 +2,7 @@ import { Link, type MetaFunction } from "react-router";
 import { Button } from "~/common/components";
 import { ProductCard } from "~/features/products/components/product-card";
 import { PostCard } from "~/features/community/components/post-card";
-import { IdeasCard } from "~/features/ideas/components/ideas-card";
+import { IdeaCard } from "~/features/ideas/components/idea-card";
 import { JobsCard } from "~/features/jobs/components/jobs-card";
 import { TeamCard } from "~/features/teams/team-card";
 
@@ -91,7 +91,7 @@ export default function HomePage() {
               </div>
 
               {Array.from({ length: 5 }).map((_, index) => (
-                  <IdeasCard
+                  <IdeaCard
                       key={index}
                       id={`ideasId-${index}`}
                       title="A startup that creates AI-powered generated personal trainer,
