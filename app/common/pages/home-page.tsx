@@ -3,7 +3,7 @@ import { Button } from "~/common/components";
 import { ProductCard } from "~/features/products/components/product-card";
 import { PostCard } from "~/features/community/components/post-card";
 import { IdeaCard } from "~/features/ideas/components/idea-card";
-import { JobsCard } from "~/features/jobs/components/jobs-card";
+import { JobCard } from "~/features/jobs/components/job-card";
 import { TeamCard } from "~/features/teams/team-card";
 
 export const meta : MetaFunction = () => {
@@ -123,7 +123,7 @@ export default function HomePage() {
               </div>
 
               {Array.from({ length: 11 }).map((_, index) => (
-                  <JobsCard
+                  <JobCard
                       key={index}
                       id={`jobsId-${index}`}
                       company="Tesla"

@@ -1,6 +1,42 @@
+# OS file
 .DS_Store
+Thumbs.db
+
+# node_modules
 /node_modules/
 
 # React Router
 /.react-router/
+
+# build
 /build/
+/dist/
+
+# vite cache
+.vite/
+
+# typescript cache
+*.tsbuildinfo
+
+# Log
+npm-debug.log*
+vite-error.log*
+
+# 개인용 Docker/Nginx 설정 무시
+Dockerfile
+nginx.conf
+
+# env
+.env
+.env.*
+!.env.example
+
+# IDE settings
+.idea/
+.vscode/
+*.iml
+
+# cache
+.cache/
+*.log
+*.log.*

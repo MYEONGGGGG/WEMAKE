@@ -95,4 +95,11 @@ export default [
         route("/:ideaId", "features/ideas/pages/idea-page.tsx"),
     ]),
 
+    // "/jobs" 그룹 라우팅
+    ...prefix("/jobs", [
+        index("features/jobs/pages/jobs-page.tsx"),
+        route("/:jobId", "features/jobs/pages/job-page.tsx"),
+        route("/submit", "features/jobs/pages/submit-job-page.tsx"),
+    ]),
+
 ] satisfies RouteConfig;

@@ -13,7 +13,7 @@ interface JobsCardProps {
     salary: string;
 }
 
-export function JobsCard({
+export function JobCard({
     id,
     company,
     companyLogoUrl,
