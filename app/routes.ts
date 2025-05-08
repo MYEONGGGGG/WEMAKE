@@ -111,7 +111,7 @@ export default [
             // "/opt" 하위 그룹
             ...prefix("/otp", [
                 route("/start", "features/auth/pages/otp-start-page.tsx"),
-                route("/complete", "features/auth/pages/otp-page.tsx"),
+                route("/complete", "features/auth/pages/otp-complete-page.tsx"),
             ]),
 
             // "/social" 하위 그룹
