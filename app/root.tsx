@@ -4,7 +4,7 @@ import {
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration,
+  ScrollRestoration, useLocation,
 } from "react-router";
 
 import type { Route } from "./+types/root";
@@ -40,9 +40,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         {/* 정상일 경우, function App을 렌더링 함 */}
         {/* 오류 발생 시, function ErrorBoundary를 렌더링 함 */}
-        <main className="px-20">
-            {children}
-        </main>
+        <main>{children}</main>
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -51,13 +49,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const { pathname } = useLocation();
+
   return (
-      <div className="py-28">
-        <Navigation
-            isLoggedIn={false}
-            hasNotifications={false}
-            hasMessages={false}
-        />
+      <div className={pathname.includes("/auth/") ? "" : `py-28 px-20`}>
+        { pathname.includes("/auth")
+            ? null
+            : <Navigation
+                isLoggedIn={ false }
+                hasNotifications={ false }
+                hasMessages={ false }
+            />
+        }
         <Outlet />
       </div>
   );

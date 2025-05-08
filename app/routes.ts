@@ -102,4 +102,30 @@ export default [
         route("/submit", "features/jobs/pages/submit-job-page.tsx"),
     ]),
 
+    // "/auth" 그룹 라우팅
+    ...prefix("/auth", [
+        layout("features/auth/layouts/auth-layout.tsx", [
+            route("/login", "features/auth/pages/login-page.tsx"),
+            route("/join", "features/auth/pages/join-page.tsx"),
+
+            // "/opt" 하위 그룹
+            ...prefix("/otp", [
+                route("/start", "features/auth/pages/otp-start-page.tsx"),
+                route("/complete", "features/auth/pages/otp-page.tsx"),
+            ]),
+
+            // "/social" 하위 그룹
+            ...prefix("/social/:provider", [
+                route(
+                    "/start",
+                    "features/auth/pages/social-start-page.tsx"
+                ),
+                route(
+                    "/complete",
+                    "features/auth/pages/social-complete-page.tsx"
+                )
+            ]),
+        ]),
+    ]),
+
 ] satisfies RouteConfig;
