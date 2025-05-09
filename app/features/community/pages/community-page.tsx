@@ -105,6 +105,7 @@ export default function CommunityPage() {
                                 author="John Doe"
                                 authorAvatarUrl="https://github.com/apple.png"
                                 category="Productivity"
+                                postedAt="12 hours ago"
                                 expanded
                             />
                         ))}

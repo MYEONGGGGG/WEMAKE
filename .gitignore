@@ -22,7 +22,7 @@ Thumbs.db
 npm-debug.log*
 vite-error.log*
 
-# 개인용 Docker/Nginx 설정 무시
+# docker 개발용
 Dockerfile
 nginx.conf
 

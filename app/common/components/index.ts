@@ -2,6 +2,15 @@ export { Avatar, AvatarImage, AvatarFallback } from "~/common/components/ui/avat
 
 export { Button, buttonVariants } from "~/common/components/ui/button";
 export { Badge, badgeVariants } from "~/common/components/ui/badge";
+export {
+    Breadcrumb,
+    BreadcrumbList,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+    BreadcrumbEllipsis,
+} from "~/common/components/ui/breadcrumb";
 
 export {
     Card,
