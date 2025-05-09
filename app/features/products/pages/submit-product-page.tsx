@@ -1,4 +1,4 @@
-import type { Route } from "./+types/submit-page";
+import type { Route } from "./+types/submit-product-page";
 import { Hero } from "~/common/components/hero";
 import { Form } from "react-router";
 import InputPair from "~/common/components/input-pair";
@@ -13,7 +13,7 @@ export const meta : Route.MetaFunction = () => {
     ];
 }
 
-export default function SubmitPage({ loaderData }: Route.ComponentProps) {
+export default function SubmitProductPage({ loaderData }: Route.ComponentProps) {
     const [icon, setIcon] = useState<string | null>(null);
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
@@ -92,7 +92,6 @@ export default function SubmitPage({ loaderData }: Route.ComponentProps) {
                             <img src={icon} alt="icon" className="object-cover w-full h-full" />
                         ) : null}
                     </div>
-                    {/* Choose image file */}
                     <Label className="flex flex-col gap-1">
                         Icon
                     </Label>

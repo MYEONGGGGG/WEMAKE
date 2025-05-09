@@ -2,7 +2,6 @@ import { Hero } from "~/common/components/hero";
 import type { Route } from "./+types/submit-team-page";
 import InputPair from "~/common/components/input-pair";
 import SelectPair from "~/common/components/select-pair";
-import { JOB_TYPES, LOCATIONS_TYPES, SALARY_RANGE } from "~/features/jobs/constants";
 import { Button } from "~/common/components";
 import { Form } from "react-router";
 

@@ -4,18 +4,27 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [
-      tailwindcss(),
-      reactRouter(),
-      tsconfigPaths()
-  ],
-  server: {
-    host: true,
-    port: 5173,
-    open: true,
-    watch: {
-      usePolling: true,
-      interval: 300,
+    plugins: [
+        tailwindcss(),
+        reactRouter(),
+        tsconfigPaths()
+    ],
+    server: {
+        host: true,
+        port: 5173,
+        open: true,
+        watch: {
+            usePolling: true,
+            interval: 300,
+        },
+        fs: {
+            allow: ['.']
+        },
+        middlewareMode: false,
     },
-  },
+    build: {
+        rollupOptions: {
+            external: ['.well-known/appspecific/com.chrome.devtools.json']
+        }
+    }
 });

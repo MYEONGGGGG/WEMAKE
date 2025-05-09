@@ -64,7 +64,7 @@ export default [
 
         // 개별 라우트(독립적인 페이지)
         route("/search", "features/products/pages/search-page.tsx"),
-        route("/submit", "features/products/pages/submit-page.tsx"),
+        route("/submit", "features/products/pages/submit-product-page.tsx"),
         route("/promote", "features/products/pages/promote-page.tsx"),
 
         // "/products/:productId" 상세 제품 페이지 (동적 라우팅 구조)
@@ -141,5 +141,27 @@ export default [
         route("/:teamId", "features/teams/pages/team-page.tsx"),
         route("/create", "features/teams/pages/submit-team-page.tsx"),
     ]),
+
+    // "/my" 그룹 라우팅
+    ...prefix("/my", [
+        // "/my/dashboard" 관련 페이지 그룹
+        ...prefix("dashboard", [
+            index("features/users/pages/dashboard-page.tsx"),
+            route("/ideas", "features/users/pages/dashboard-ideas-page.tsx"),
+            route("/products/:productId", "features/users/pages/dashboard-product-page.tsx"),
+        ]),
+
+        route("/profile", "features/users/pages/my-profile-page.tsx"),
+        route("/settings", "features/users/pages/settings-page.tsx"),
+        route("/notifications", "features/users/pages/notifications-page.tsx"),
+
+        // "/my/messages" 관련 페이지 그룹
+        ...prefix("/messages", [
+            index("features/users/pages/messages-page.tsx"),
+            route("/:messageId", "features/users/pages/message-page.tsx"),
+        ]),
+    ]),
+
+    route("users/:username", "features/users/pages/profile-page.tsx"),
 
 ] satisfies RouteConfig;

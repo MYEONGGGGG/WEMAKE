@@ -30,7 +30,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   Settings.defaultZone = "Asia/Seoul";
 
   return (
-    <html lang="en"> {/* dark mode: className="dark" */}
+    <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -38,8 +38,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {/* 정상일 경우, function App을 렌더링 함 */}
-        {/* 오류 발생 시, function ErrorBoundary를 렌더링 함 */}
         <main>{children}</main>
         <ScrollRestoration />
         <Scripts />
@@ -56,9 +54,9 @@ export default function App() {
         { pathname.includes("/auth")
             ? null
             : <Navigation
-                isLoggedIn={ false }
-                hasNotifications={ false }
-                hasMessages={ false }
+                isLoggedIn={true}
+                hasNotifications={false}
+                hasMessages={false}
             />
         }
         <Outlet />

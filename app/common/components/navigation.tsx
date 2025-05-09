@@ -135,7 +135,9 @@ const menus = [
 ];
 
 export default function Navigation({
-    isLoggedIn, hasNotifications, hasMessages,
+    isLoggedIn,
+    hasNotifications,
+    hasMessages,
 } : {
     isLoggedIn: boolean;
     hasNotifications: boolean;
@@ -143,13 +145,15 @@ export default function Navigation({
 }) {
 
     return (
-        <nav className="flex px-20 h-16 items-center justify-between backdrop-blur fixed
-        top-0 left-0 right-0 z-50 bg-background-500/50">
+        <nav className="flex px-20 h-16 items-center justify-between backdrop-blur fixed top-0 left-0 right-0 z-50 bg-background-500/50">
             <div className="flex items-center">
                 <Link to="/" className="font-bold tracking-tighter text-lg">
                     WeMaKe
                 </Link>
-                <Separator orientation="vertical" className="h-6 mx-4"/>
+                <Separator
+                    orientation="vertical"
+                    className="h-6 mx-4"
+                />
                 <NavigationMenu>
                     <NavigationMenuList>
                         {menus.map((menu) => (
@@ -199,7 +203,12 @@ export default function Navigation({
             </div>
             {isLoggedIn ? (
                 <div className="flex items-center gap-2">
-                    <Button size="icon" variant="ghost" asChild className="relative">
+                    <Button
+                        size="icon"
+                        variant="ghost"
+                        asChild
+                        className="relative"
+                    >
                         <Link to="/my/notifications">
                             <BellIcon className="size-4" />
                             {hasNotifications && (
@@ -207,7 +216,12 @@ export default function Navigation({
                             )}
                         </Link>
                     </Button>
-                    <Button size="icon" variant="ghost" asChild className="relative">
+                    <Button
+                        size="icon"
+                        variant="ghost"
+                        asChild
+                        className="relative"
+                    >
                         <Link to="/my/messages">
                             <MessageCircleIcon className="size-4" />
                             {hasMessages && (
@@ -216,7 +230,7 @@ export default function Navigation({
                         </Link>
                     </Button>
                     <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
+                        <DropdownMenuTrigger asChild className="curpoint-pointer">
                             <Avatar>
                                 <AvatarImage src="https://github.com/serranoarevalo.png" alt="Avatar" />
                                 <AvatarFallback>N</AvatarFallback>
