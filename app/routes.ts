@@ -135,4 +135,11 @@ export default [
         route("/submit", "features/community/pages/submit-post-page.tsx"),
     ]),
 
+    // "/teams" 그룹 라우팅
+    ...prefix("/teams", [
+        index("features/teams/pages/teams-page.tsx"),
+        route("/:teamId", "features/teams/pages/team-page.tsx"),
+        route("/create", "features/teams/pages/submit-team-page.tsx"),
+    ]),
+
 ] satisfies RouteConfig;
