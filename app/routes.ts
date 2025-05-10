@@ -155,10 +155,12 @@ export default [
         route("/settings", "features/users/pages/settings-page.tsx"),
         route("/notifications", "features/users/pages/notifications-page.tsx"),
 
-        // "/my/messages" 관련 페이지 그룹
-        ...prefix("/messages", [
-            index("features/users/pages/messages-page.tsx"),
-            route("/:messageId", "features/users/pages/message-page.tsx"),
+        layout("features/users/layouts/messages-layout.tsx", [
+            // "/my/messages" 관련 페이지 그룹
+            ...prefix("/messages", [
+                index("features/users/pages/messages-page.tsx"),
+                route("/:messageId", "features/users/pages/message-page.tsx"),
+            ]),
         ]),
     ]),
 
