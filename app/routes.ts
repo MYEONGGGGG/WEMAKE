@@ -146,7 +146,7 @@ export default [
     ...prefix("/my", [
         layout("features/users/layouts/dashboard-layout.tsx", [
             // "/my/dashboard" 관련 페이지 그룹
-            ...prefix("dashboard", [
+            ...prefix("/dashboard", [
                 index("features/users/pages/dashboard-page.tsx"),
                 route("/ideas", "features/users/pages/dashboard-ideas-page.tsx"),
                 route("/products/:productId", "features/users/pages/dashboard-product-page.tsx"),
