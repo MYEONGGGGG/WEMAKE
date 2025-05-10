@@ -50,6 +50,7 @@ export default function ProductOverviewLayout({
             {/* overview and reviews */}
             <div className="flex gap-2.5">
                 <NavLink
+                    end
                     className={( {isActive} ) =>
                         cn(
                             buttonVariants({ variant: "outline" }),
