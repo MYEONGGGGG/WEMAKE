@@ -8,6 +8,8 @@ export const meta: Route.MetaFunction = () => {
 
 export default function DashboardPage() {
     return(
-        <></>
+        <div className="space-y-10">
+            Dashboard page
+        </div>
     );
 }

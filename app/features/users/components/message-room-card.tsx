@@ -1,19 +1,19 @@
 import { Avatar, AvatarFallback, AvatarImage, SidebarMenuButton, SidebarMenuItem } from "~/common/components";
 import { Link, useLocation } from "react-router";
 
-interface MessageCardProps {
+interface MessageRoomCardProps {
     id: string;
     name: string;
     lastMessage: string;
     avatarUrl: string;
 }
 
-export function MessageCard({
+export function MessageRoomCard({
     id,
     name,
     lastMessage,
     avatarUrl,
-}: MessageCardProps) {
+}: MessageRoomCardProps) {
     const location = useLocation();
 
     return (
