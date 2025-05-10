@@ -1,3 +1,4 @@
+/** @Shadcn-ui */
 export { Avatar, AvatarImage, AvatarFallback } from "~/common/components/ui/avatar";
 
 export { Button, buttonVariants } from "~/common/components/ui/button";
@@ -142,3 +143,6 @@ export {
 } from "~/common/components/ui/pagination";
 
 export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/common/components/ui/tooltip";
+
+/** @Magic-ui */
+export { FlickeringGrid } from "~/common/components/magicui/flickering-grid"
