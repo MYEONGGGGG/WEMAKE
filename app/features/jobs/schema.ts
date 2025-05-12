@@ -13,13 +13,10 @@ export const locations = pgEnum(
     LOCATIONS_TYPES.map((type) => type.value) as [string, ...string[]]
 );
 
-export const salaryRanges = pgEnum(
-    "salary_range",
-    SALARY_RANGE
-);
+export const salaryRanges = pgEnum("salary_range", SALARY_RANGE);
 
-export const jobs = pgTable('jobs', {
-    job_id: bigint({mode: "number"}).primaryKey().generatedByDefaultAsIdentity(),
+export const jobs = pgTable("jobs", {
+    job_id: bigint({ mode: "number" }).primaryKey().generatedAlwaysAsIdentity(),
     position: text().notNull(),
     overview: text().notNull(),
     responsibilities: text().notNull(),
@@ -31,6 +28,7 @@ export const jobs = pgTable('jobs', {
     company_location: text().notNull(),
     apply_url: text().notNull(),
     job_type: jobTypes().notNull(),
+    location: locations().notNull(),
     salary_range: salaryRanges().notNull(),
     created_at: timestamp().notNull().defaultNow(),
     updated_at: timestamp().notNull().defaultNow(),
