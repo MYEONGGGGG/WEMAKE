@@ -36,7 +36,7 @@ export function JobCard({
                         />
                         <div className="space-x-2">
                             <span className="text-sm text-accent-foreground">{company}</span>
-                            <span className="text-sx text-muted-foreground"> {postedAt}</span>
+                            <span className="text-xs text-muted-foreground"> {postedAt}</span>
                         </div>
                     </div>
                     <CardTitle>{title}</CardTitle>

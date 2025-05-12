@@ -22,6 +22,8 @@ import {
 } from "~/common/components/index";
 import { cn } from "~/lib/utils";
 import { BellIcon, LucideBarChart3, MessageCircleIcon, SettingsIcon, UserIcon } from "lucide-react";
+import { useIsMobile } from "~/hooks/use-mobile";
+import { MobileMenu } from "~/common/components/mobile-menu";
 
 const menus = [
     {
@@ -143,145 +145,166 @@ export default function Navigation({
     hasNotifications: boolean;
     hasMessages: boolean;
 }) {
+    const isMobile = useIsMobile();
 
     return (
-        <nav className="flex px-20 h-16 items-center justify-between backdrop-blur fixed top-0 left-0 right-0 z-50 bg-background-500/50">
-            <div className="flex items-center">
-                <Link to="/" className="font-bold tracking-tighter text-lg">
-                    WeMaKe
-                </Link>
-                <Separator
-                    orientation="vertical"
-                    className="h-6 mx-4"
-                />
-                <NavigationMenu>
-                    <NavigationMenuList>
-                        {menus.map((menu) => (
-                            <NavigationMenuItem key={menu.name}>
-                                {menu.items ? (
-                                    <>
-                                        <Link to={menu.to}>
-                                            <NavigationMenuTrigger>{menu.name}</NavigationMenuTrigger>
-                                        </Link>
-                                        <NavigationMenuContent>
-                                            <ul className="grid w-[600px] font-light gap-3 px-4 grid-cols-2">
-                                                {menu.items?.map((item) => (
-                                                    <NavigationMenuItem
-                                                        key={item.name}
-                                                        className={cn([
-                                                            "select-none rounded-md transition-colors focus:bg-accent hover:bg-accent",
-                                                            (item.to === "/products/promote" ||
-                                                             item.to === "/jobs/submit") &&
-                                                            "col-span-2 bg-primary/10 hover:bg-primary/20 focus:bg-primary/20",
-                                                        ])}
-                                                    >
-                                                        <NavigationMenuLink asChild>
-                                                            <Link
-                                                                className="p-3 space-y-1 block leading-none no-underline outline-none"
-                                                                to={item.to}
-                                                            >
-                                                                <span className="text-sm font-medium leading-none">
+        <nav className="fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-4 sm:px-6 md:px-20 backdrop-blur bg-background/50 md:bg-background-500/50">
+        <div className="flex items-center gap-4">
+            {/* Mobile : 햄버거 메뉴 활성화 */}
+            {isMobile && <MobileMenu />}
+
+            {/* Logo */}
+            <Link to="/" className="font-bold tracking-tighter text-lg">
+                WeMaKe
+            </Link>
+
+            {/* Desk-top, Tablet: 메뉴, 구분선 표시 */}
+            {!isMobile && (
+                <>
+                    <Separator orientation="vertical" className="h-6 mx-4" />
+                    <NavigationMenu className="hidden md:flex max-w-[60vw]">
+                        <NavigationMenuList className="gap-0 md:gap-2 lg:gap-5">
+                            {menus.map((menu) => (
+                                <NavigationMenuItem key={menu.name}>
+                                    {menu.items ? (
+                                        <>
+                                            <Link to={menu.to}>
+                                                <NavigationMenuTrigger className="text-sm md:text-xs lg:text-sm truncate max-w-[100px]">
+                                                    {menu.name}
+                                                </NavigationMenuTrigger>
+                                            </Link>
+                                            <NavigationMenuContent className="w-full md:w-[400px] lg:w-[600px]">
+                                                <ul className="grid px-2 gap-2 md:grid-cols-2">
+                                                    {menu.items?.map((item) => (
+                                                        <NavigationMenuItem
+                                                            key={item.name}
+                                                            className={cn([
+                                                                "select-none rounded-md transition-colors focus:bg-accent hover:bg-accent",
+                                                                (item.to === "/products/promote" ||
+                                                                    item.to === "/jobs/submit") &&
+                                                                "col-span-2 bg-primary/10 hover:bg-primary/20 focus:bg-primary/20",
+                                                            ])}
+                                                        >
+                                                            <NavigationMenuLink asChild>
+                                                                <Link
+                                                                    className="p-3 space-y-1 block leading-none no-underline outline-none"
+                                                                    to={item.to}
+                                                                >
+                                                                <span className="md:text-xs lg:text-sm font-medium leading-none">
                                                                     {item.name}
                                                                 </span>
-                                                                <p className="text-sm leading-snug text-muted-foreground">
-                                                                    {item.description}
-                                                                </p>
-                                                            </Link>
-                                                        </NavigationMenuLink>
-                                                    </NavigationMenuItem>
-                                                ))}
-                                            </ul>
-                                        </NavigationMenuContent>
-                                    </>
-                                ) : (
-                                    <Link className={navigationMenuTriggerStyle()} to={menu.to}>{menu.name}</Link>
-                                )}
-                            </NavigationMenuItem>
-                        ))}
-                    </NavigationMenuList>
-                </NavigationMenu>
-            </div>
-            {isLoggedIn ? (
-                <div className="flex items-center gap-2">
-                    <Button
-                        size="icon"
-                        variant="ghost"
-                        asChild
-                        className="relative"
-                    >
-                        <Link to="/my/notifications">
-                            <BellIcon className="size-4" />
-                            {hasNotifications && (
-                                <div className="absolute -top-0.5 -right-0.5 size-2 bg-red-500 rounded-full"/>
-                            )}
-                        </Link>
-                    </Button>
-                    <Button
-                        size="icon"
-                        variant="ghost"
-                        asChild
-                        className="relative"
-                    >
-                        <Link to="/my/messages">
-                            <MessageCircleIcon className="size-4" />
-                            {hasMessages && (
-                                <div className="absolute -top-0.5 -right-0.5 size-2 bg-red-500 rounded-full"/>
-                            )}
-                        </Link>
-                    </Button>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild className="curpoint-pointer">
-                            <Avatar>
-                                <AvatarImage src="https://github.com/serranoarevalo.png" alt="Avatar" />
-                                <AvatarFallback>N</AvatarFallback>
-                            </Avatar>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-56">
-                            <DropdownMenuLabel className="flex flex-col">
-                                <span className="font-medium">John Doe</span>
-                                <span className="text-xs text-muted-foreground">@username</span>
-                            </DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuGroup>
-                                <DropdownMenuItem asChild className="curpoint-pointer">
-                                    <Link to="/my/dashboard">
-                                        <LucideBarChart3 className="size-4 mr-2" />
-                                        Dashboard
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem asChild className="curpoint-pointer">
-                                    <Link to="/my/profile">
-                                        <UserIcon className="size-4 mr-2" />
-                                        Profile
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem asChild className="curpoint-pointer">
-                                    <Link to="/my/settings">
-                                        <SettingsIcon className="size-4 mr-2" />
-                                        Settings
-                                    </Link>
-                                </DropdownMenuItem>
-                            </DropdownMenuGroup>
-                            <DropdownMenuSeparator />
+                                                                    <p className="md:text-xs lg:text-sm leading-snug text-muted-foreground">
+                                                                        {item.description}
+                                                                    </p>
+                                                                </Link>
+                                                            </NavigationMenuLink>
+                                                        </NavigationMenuItem>
+                                                    ))}
+                                                </ul>
+                                            </NavigationMenuContent>
+                                        </>
+                                    ) : (
+                                        <Link
+                                            className={cn(
+                                                navigationMenuTriggerStyle(),
+                                                "text-sm md:text-xs lg:text-sm"
+                                            )}
+                                            to={menu.to}
+                                        >
+                                            {menu.name}
+                                        </Link>
+                                    )}
+                                </NavigationMenuItem>
+                            ))}
+                        </NavigationMenuList>
+                    </NavigationMenu>
+                </>
+            )}
+        </div>
+
+        {isLoggedIn ? (
+            <div className="flex items-center gap-2">
+                <Button
+                    size="icon"
+                    variant="ghost"
+                    asChild
+                    className="relative"
+                >
+                    <Link to="/my/notifications">
+                        <BellIcon className="size-4" />
+                        {hasNotifications && (
+                            <div className="absolute -top-0.5 -right-0.5 size-2 bg-red-500 rounded-full"/>
+                        )}
+                    </Link>
+                </Button>
+
+                <Button
+                    size="icon"
+                    variant="ghost"
+                    asChild
+                    className="relative"
+                >
+                    <Link to="/my/messages">
+                        <MessageCircleIcon className="size-4" />
+                        {hasMessages && (
+                            <div className="absolute -top-0.5 -right-0.5 size-2 bg-red-500 rounded-full"/>
+                        )}
+                    </Link>
+                </Button>
+
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild className="curpoint-pointer">
+                        <Avatar>
+                            <AvatarImage src="https://github.com/serranoarevalo.png" alt="Avatar" />
+                            <AvatarFallback>N</AvatarFallback>
+                        </Avatar>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                        <DropdownMenuLabel className="flex flex-col">
+                            <span className="font-medium">John Doe</span>
+                            <span className="text-xs text-muted-foreground">@username</span>
+                        </DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuGroup>
                             <DropdownMenuItem asChild className="curpoint-pointer">
-                                <Link to="/auth/logout">
-                                    Logout
+                                <Link to="/my/dashboard">
+                                    <LucideBarChart3 className="size-4 mr-2" />
+                                    Dashboard
                                 </Link>
                             </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </div>
-                )
-                : (
-                <div className="flex items-center gap-4">
-                    <Button asChild variant="secondary">
-                        <Link to="/auth/login">Login</Link>
-                    </Button>
-                    <Button asChild>
-                        <Link to="/auth/join">Join</Link>
-                    </Button>
-                </div>
-            )}
+                            <DropdownMenuItem asChild className="curpoint-pointer">
+                                <Link to="/my/profile">
+                                    <UserIcon className="size-4 mr-2" />
+                                    Profile
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild className="curpoint-pointer">
+                                <Link to="/my/settings">
+                                    <SettingsIcon className="size-4 mr-2" />
+                                    Settings
+                                </Link>
+                            </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild className="curpoint-pointer">
+                            <Link to="/auth/logout">
+                                Logout
+                            </Link>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+
+            </div>
+        ) : (
+            <div className="flex items-center gap-2 sm:gap-4">
+                <Button asChild variant="secondary" className="text-xs px-3 py-1.5">
+                    <Link to="/auth/login">Login</Link>
+                </Button>
+                <Button asChild className="text-xs px-3 py-1.5">
+                    <Link to="/auth/join">Join</Link>
+                </Button>
+            </div>
+        )}
         </nav>
     );
 }
