@@ -15,18 +15,18 @@ export const meta : MetaFunction = () => {
 
 export default function HomePage() {
     return (
-      <div className="px-20 space-y-40">
+      <div className="px-10 md:px-20 space-y-20 md:space-y-40">
 
           {/* product card */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               <div>
-                  <h2 className="text-5xl font-bold leading-tight tracking-tight">
+                  <h2 className="text-2xl md:text-5xl font-bold leading-tight tracking-tight">
                       Today's Products
                   </h2>
-                  <p className="text-xl font-light text-foreground">
+                  <p className="text-lg md:text-xl font-light text-foreground">
                       The best products made by our community today.
                   </p>
-                  <Button variant="link" asChild className="text-lg p-0">
+                  <Button variant="link" asChild className="text-sm md:text-lg p-0">
                       <Link to="/products/leaderboards">
                           Explore all products &rarr;
                       </Link>
@@ -46,15 +46,15 @@ export default function HomePage() {
           </div>
 
           {/* post card */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               <div>
-                  <h2 className="text-5xl font-bold leading-tight tracking-tight">
+                  <h2 className="text-2xl md:text-5xl font-bold leading-tight tracking-tight">
                       Latest Discussions
                   </h2>
-                  <p className="text-xl font-light text-foreground">
+                  <p className="text-lg md:text-xl font-light text-foreground">
                       The latest discussions from our community.
                   </p>
-                  <Button variant="link" asChild className="text-lg p-0">
+                  <Button variant="link" asChild className="text-sm md:text-lg p-0">
                       <Link to="/community">
                           Explore All Products &rarr;
                       </Link>
@@ -75,15 +75,15 @@ export default function HomePage() {
           </div>
 
           {/* ideas GPT card */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               <div>
-                  <h2 className="text-5xl font-bold leading-tight tracking-tight">
+                  <h2 className="text-2xl md:text-5xl font-bold leading-tight tracking-tight">
                       IdeasGPT
                   </h2>
-                  <p className="text-xl font-light text-foreground">
+                  <p className="text-lg md:text-xl font-light text-foreground">
                       Find ideas for your next project.
                   </p>
-                  <Button variant="link" asChild className="text-lg p-0">
+                  <Button variant="link" asChild className="text-sm md:text-lg p-0">
                       <Link to="/ideas">
                           Explore All ideas &rarr;
                       </Link>
@@ -107,15 +107,15 @@ export default function HomePage() {
           </div>
 
           {/* Jobs Card */}
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               <div>
-                  <h2 className="text-5xl font-bold leading-tight tracking-tight">
+                  <h2 className="text-2xl md:text-5xl font-bold leading-tight tracking-tight">
                       Letest Jobs
                   </h2>
-                  <p className="text-xl font-light text-foreground">
+                  <p className="text-lg md:text-xl font-light text-foreground">
                       Find your dream job.
                   </p>
-                  <Button variant="link" asChild className="text-lg p-0">
+                  <Button variant="link" asChild className="text-sm md:text-lg p-0">
                       <Link to="/jobs">
                           Explore All jobs &rarr;
                       </Link>
@@ -139,12 +139,12 @@ export default function HomePage() {
           </div>
 
           {/* Team Card */}
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               <div>
-                  <h2 className="text-5xl font-bold leading-tight tracking-tight">
+                  <h2 className="text-2xl md:text-5xl font-bold leading-tight tracking-tight">
                       Find a Team mate
                   </h2>
-                  <p className="text-xl font-light text-foreground">
+                  <p className="text-lg md:text-xl font-light text-foreground">
                       Join a team looking for a new member.
                   </p>
                   <Button variant="link" asChild className="text-lg p-0">
