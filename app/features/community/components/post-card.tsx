@@ -2,16 +2,17 @@ import { Link } from "react-router";
 import { Card, CardFooter, CardHeader, CardTitle } from "~/common/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "~/common/components/ui/avatar";
 import { Button } from "~/common/components/ui/button";
-import { ChevronUpIcon } from "lucide-react";
+import { ChevronUpIcon, DotIcon } from "lucide-react";
 import { cn } from "~/lib/utils";
+import { DateTime } from "luxon";
 
 interface PostCardProps {
-    id: string;
+    id: number;
     title: string;
     author: string
-    authorAvatarUrl: string;
+    authorAvatarUrl: string | null;
     category: string;
-    postedAt: string;
+    postedAt: Date;
     expanded?: boolean;
     voteCount?: number;
 }
@@ -37,9 +38,11 @@ export function PostCard({
                     <div className="space-y-2">
                         <CardTitle>{title}</CardTitle>
                         <div className="flex flex-row gap-2 leading-tight text-xs text-muted-foreground">
-                            <span>{author}</span>
-                            <span>{category}</span>
-                            <span>{postedAt}</span>
+                            <span>
+                                {author} on {category}
+                            </span>
+                            <DotIcon className="w-4 h-4" />
+                            <span>{DateTime.fromJSDate(postedAt).toRelative()}</span>
                         </div>
                     </div>
                 </CardHeader>
