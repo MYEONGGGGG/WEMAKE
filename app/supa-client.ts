@@ -8,7 +8,7 @@ import type { Database as SupabaseDatabase } from "database.types";
  *  "database.types" 파일은 Supabase 프로젝트의 모든 테이블/컬럼/타입 정보를 포함한 타입 선언 파일
  * */
 
-const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseUrl = "https://nsyhtlymmxojcupbgsaw.supabase.co";
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
 // 콘솔에서 확인
