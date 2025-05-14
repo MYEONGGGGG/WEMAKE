@@ -165,7 +165,7 @@ export default function Navigation({
                                 <NavigationMenuItem key={menu.name}>
                                     {menu.items ? (
                                         <>
-                                            <Link to={menu.to}>
+                                            <Link to={menu.to} prefetch="render">
                                                 <NavigationMenuTrigger className="text-sm md:text-xs lg:text-sm truncate max-w-[100px]">
                                                     {menu.name}
                                                 </NavigationMenuTrigger>
