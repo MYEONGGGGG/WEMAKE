@@ -1,6 +1,6 @@
 import { Hero } from "~/common/components/hero";
 import type { Route } from "./+types/community-page";
-import { Form, Link, useSearchParams } from "react-router";
+import { Await, Form, Link, useSearchParams } from "react-router";
 import {
     Button,
     DropdownMenu,
@@ -12,6 +12,7 @@ import { ChevronDownIcon } from "lucide-react";
 import { PERIOD_OPTIONS, SORT_OPTIONS } from "~/features/community/constants";
 import { PostCard } from "~/features/community/components/post-card";
 import { getTopics, getPosts } from "~/features/community/queries";
+import { Suspense } from "react";
 
 export const meta: Route.MetaFunction = () => {
     return [
@@ -20,13 +21,19 @@ export const meta: Route.MetaFunction = () => {
 };
 
 export const loader = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    const topics = await getTopics();
-    const posts = await getPosts();
+    // await new Promise((resolve) => setTimeout(resolve, 1000));
+    // const topics = await getTopics();
+    // const posts = await getPosts();
+
+    // const [topics, posts] = await Promise.all([getTopics(), getPosts()]);
+    const topics = getTopics();
+    const posts = getPosts();
+
     return { topics, posts };
 };
 
 export default function CommunityPage({ loaderData }: Route.ComponentProps) {
+    const { topics, posts } = loaderData;
     const [searchParams, setSearchParams] = useSearchParams();
     const sorting = searchParams.get("sorting") || "newest";
     const period = searchParams.get("period") || "all";
@@ -104,21 +111,27 @@ export default function CommunityPage({ loaderData }: Route.ComponentProps) {
                             <Link to={`/community/submit`}>Create Discussion</Link>
                         </Button>
                     </div>
-                    <div className="space-y-5 w-full">
-                        {loaderData.posts.map((post) => (
-                            <PostCard
-                                key={post.post_id}
-                                id={post.post_id}
-                                title={post.title}
-                                author={post.author}
-                                authorAvatarUrl={post.author_avatar}
-                                category={post.topic}
-                                postedAt={post.created_at}
-                                voteCount={post.upvotes}
-                                expanded
-                            />
-                        ))}
-                    </div>
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <Await resolve={posts}>
+                            {(data) => (
+                                <div className="space-y-5 w-full">
+                                    {data.map((post) => (
+                                        <PostCard
+                                            key={post.post_id}
+                                            id={post.post_id}
+                                            title={post.title}
+                                            author={post.author}
+                                            authorAvatarUrl={post.author_avatar}
+                                            category={post.topic}
+                                            postedAt={post.created_at}
+                                            voteCount={post.upvotes}
+                                            expanded
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                        </Await>
+                    </Suspense>
                 </div>
 
                 {/* right */}
@@ -126,18 +139,26 @@ export default function CommunityPage({ loaderData }: Route.ComponentProps) {
                     <span className="text-sm font-bold text-muted-foreground uppercase">
                         Topics
                     </span>
-                    <div className="flex flex-col gap-8 items-start">
-                        {loaderData.topics.map((topic) => (
-                            <Button
-                                asChild
-                                variant="link"
-                                key={topic.slug}
-                                className="pl-0"
-                            >
-                                <Link to={`/community?topic=${topic.slug}`} >{topic.name}</Link>
-                            </Button>
-                        ))}
-                    </div>
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <Await resolve={topics}>
+                            {(data) => (
+                                <div className="flex flex-col gap-8 items-start">
+                                    {data.map((topic) => (
+                                        <Button
+                                            asChild
+                                            variant="link"
+                                            key={topic.slug}
+                                            className="pl-0"
+                                        >
+                                            <Link to={`/community?topic=${topic.slug}`} >
+                                                {topic.name}
+                                            </Link>
+                                        </Button>
+                                    ))}
+                                </div>
+                            )}
+                        </Await>
+                    </Suspense>
                 </aside>
             </div>
         </div>
