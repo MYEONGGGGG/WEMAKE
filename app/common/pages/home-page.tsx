@@ -15,10 +15,10 @@ export const meta : MetaFunction = () => {
 
 export default function HomePage() {
     return (
-      <div className="px-10 md:px-20 space-y-20 md:space-y-40">
+      <div className="px-0 md:px-20 space-y-20 md:space-y-40">
 
           {/* product card */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 text-center md:text-left">
               <div>
                   <h2 className="text-2xl md:text-5xl font-bold leading-tight tracking-tight">
                       Today's Products
@@ -46,7 +46,7 @@ export default function HomePage() {
           </div>
 
           {/* post card */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 text-center md:text-left">
               <div>
                   <h2 className="text-2xl md:text-5xl font-bold leading-tight tracking-tight">
                       Latest Discussions
@@ -75,7 +75,7 @@ export default function HomePage() {
           </div>
 
           {/* ideas GPT card */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 text-center md:text-left">
               <div>
                   <h2 className="text-2xl md:text-5xl font-bold leading-tight tracking-tight">
                       IdeasGPT
@@ -107,7 +107,7 @@ export default function HomePage() {
           </div>
 
           {/* Jobs Card */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 text-center md:text-left">
               <div>
                   <h2 className="text-2xl md:text-5xl font-bold leading-tight tracking-tight">
                       Letest Jobs
@@ -139,7 +139,7 @@ export default function HomePage() {
           </div>
 
           {/* Team Card */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 text-center md:text-left">
               <div>
                   <h2 className="text-2xl md:text-5xl font-bold leading-tight tracking-tight">
                       Find a Team mate

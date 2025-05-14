@@ -18,7 +18,7 @@ import {
     DropdownMenuTrigger,
     Avatar,
     AvatarFallback,
-    AvatarImage
+    AvatarImage,
 } from "~/common/components/index";
 import { cn } from "~/lib/utils";
 import { BellIcon, LucideBarChart3, MessageCircleIcon, SettingsIcon, UserIcon } from "lucide-react";
@@ -150,9 +150,6 @@ export default function Navigation({
     return (
         <nav className="fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-4 sm:px-6 md:px-20 backdrop-blur bg-background/50 md:bg-background-500/50">
         <div className="flex items-center gap-4">
-            {/* Mobile : 햄버거 메뉴 활성화 */}
-            {isMobile && <MobileMenu />}
-
             {/* Logo */}
             <Link to="/" className="font-bold tracking-tighter text-lg">
                 WeMaKe
@@ -223,7 +220,7 @@ export default function Navigation({
         </div>
 
         {isLoggedIn ? (
-            <div className="flex items-center gap-2">
+            <div className="hidden sm:flex items-center gap-2">
                 <Button
                     size="icon"
                     variant="ghost"
@@ -295,8 +292,8 @@ export default function Navigation({
                 </DropdownMenu>
 
             </div>
-        ) : (
-            <div className="flex items-center gap-2 sm:gap-4">
+          ) : (
+            <div className="hidden sm:flex items-center gap-2 sm:gap-4">
                 <Button asChild variant="secondary" className="text-xs px-3 py-1.5">
                     <Link to="/auth/login">Login</Link>
                 </Button>
@@ -304,7 +301,10 @@ export default function Navigation({
                     <Link to="/auth/join">Join</Link>
                 </Button>
             </div>
-        )}
+          )}
+
+          {/* Mobile : 햄버거 메뉴 활성화 */}
+          {isMobile && <MobileMenu />}
         </nav>
     );
 }

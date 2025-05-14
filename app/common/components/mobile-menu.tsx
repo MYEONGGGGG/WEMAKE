@@ -59,7 +59,7 @@ export function MobileMenu() {
                 </Button>
             </SheetTrigger>
 
-            <SheetContent side="left" className="w-64 p-6">
+            <SheetContent side="right" className="w-64 p-6">
                 <nav className="flex flex-col gap-6 mt-4">
                     {menus.map((menu) => (
                         <div key={menu.name}>

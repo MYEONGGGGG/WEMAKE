@@ -144,5 +144,25 @@ export {
 
 export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/common/components/ui/tooltip";
 
+
+
 /** @Magic-ui */
-export { FlickeringGrid } from "~/common/components/magicui/flickering-grid"
+export { AnimatedCircularProgressBar } from "~/common/components/magicui/animated-circular-progress-bar";
+export { AnimatedList } from "~/common/components/magicui/animated-list";
+
+export { BorderBeam } from "~/common/components/magicui/border-beam";
+
+export { Dock, DockIcon } from "~/common/components/magicui/dock";
+
+export { FlickeringGrid } from "~/common/components/magicui/flickering-grid";
+
+export { Globe } from "~/common/components/magicui/globe";
+
+export { Marquee } from "~/common/components/magicui/marquee";
+export { Meteors } from "~/common/components/magicui/meteors";
+
+export { VelocityScroll  } from "~/common/components/magicui/scroll-based-velocity";
+export { ShineBorder  } from "~/common/components/magicui/shine-border";
+
+export { TextAnimate  } from "~/common/components/magicui/text-animate";
+export { TypingAnimation } from "~/common/components/magicui/typing-animation";
