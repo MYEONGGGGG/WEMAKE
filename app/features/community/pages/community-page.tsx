@@ -20,12 +20,13 @@ export const meta: Route.MetaFunction = () => {
 };
 
 export const loader = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     const topics = await getTopics();
     const posts = await getPosts();
     return { topics, posts };
 };
 
-export default function CommunityPage({loaderData}: Route.ComponentProps) {
+export default function CommunityPage({ loaderData }: Route.ComponentProps) {
     const [searchParams, setSearchParams] = useSearchParams();
     const sorting = searchParams.get("sorting") || "newest";
     const period = searchParams.get("period") || "all";
