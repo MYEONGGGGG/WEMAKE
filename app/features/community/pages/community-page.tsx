@@ -103,17 +103,17 @@ export default function CommunityPage({loaderData}: Route.ComponentProps) {
                             <Link to={`/community/submit`}>Create Discussion</Link>
                         </Button>
                     </div>
-                    <div className="space-y-5">
+                    <div className="space-y-5 w-full">
                         {loaderData.posts.map((post) => (
                             <PostCard
-                                key={post.id}
-                                id={post.id}
+                                key={post.post_id}
+                                id={post.post_id}
                                 title={post.title}
-                                author={post.author}
-                                authorAvatarUrl={post.authorAvatarUrl}
-                                category={post.topic}
-                                postedAt={post.createdAt}
-                                voteCount={post.upvotes}
+                                author={post.author.name}
+                                authorAvatarUrl={post.author.avatar}
+                                category={post.topic.name}
+                                postedAt={post.created_at}
+                                voteCount={post.upvotes[0].count}
                                 expanded
                             />
                         ))}

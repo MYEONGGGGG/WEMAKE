@@ -1,26 +1,41 @@
+/** Supabase 방식 */
 import client from "~/supa-client";
 
 export const getTopics = async () => {
     const { data, error } = await client.from("topics").select("name, slug");
-
+    if (error) throw new Error(error.message);
     return data;
 };
 
 export const getPosts = async () => {
-    await client.from("posts").select(`
-       id,
-       title,
-       created_at,
-    `);
+    const { data, error } = await client.from("posts").select(`
+      post_id,
+      title,
+      created_at,
+      topic:topics!inner (
+        name
+      ),
+      author:profiles!posts_profile_id_profiles_profile_id_fk!inner (
+        name,
+        username,
+        avatar
+      ),
+      upvotes:post_upvotes (
+        count
+      )
+  `);
+
+    if (error) throw new Error(error.message);
+    return data;
 }
 
 
+
+/** Drizzle ORM 방식 */
 // import { eq, count, asc } from "drizzle-orm";
 // import db from "~/db";
 // import { topics, posts, postUpvotes } from "~/features/community/schema";
 // import { profiles } from "../users/schema";
-
-/** Drizzle ORM */
 
 // export const getTopics = async () => {
 //     const allTopics = await db

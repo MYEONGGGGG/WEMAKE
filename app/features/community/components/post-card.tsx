@@ -7,58 +7,70 @@ import { cn } from "~/lib/utils";
 import { DateTime } from "luxon";
 
 interface PostCardProps {
-    id: number;
-    title: string;
-    author: string
-    authorAvatarUrl: string | null;
-    category: string;
-    postedAt: Date;
-    expanded?: boolean;
-    voteCount?: number;
+    id: number,
+    title: string,
+    author: string,
+    authorAvatarUrl: string | null,
+    category: string,
+    postedAt: string,
+    expanded?: boolean,
+    voteCount?: number,
 }
 
 export function PostCard({
-    id,
-    title,
-    author,
-    authorAvatarUrl,
-    category,
-    postedAt,
-    expanded = false,
-    voteCount = 0,
-}: PostCardProps) {
+                             id,
+                             title,
+                             author,
+                             authorAvatarUrl,
+                             category,
+                             postedAt,
+                             expanded = false,
+                             voteCount = 0,
+                         }: PostCardProps) {
     return (
-        <Link to={`/community/${id}`}>
-            <Card className={cn("bg-transparent hover:bg-card/50 transition-colors", expanded ? "flex flex-row items-center justify-between" : "")}>
-                <CardHeader className="flex flex-row items-center gap-2">
+        <Link to={`/community/${ id }`} className="block h-full">
+            <Card
+                className={ cn(
+                    "bg-transparent h-full hover:bg-card/50 transition-colors",
+                    expanded ? "flex flex-wrap flex-row items-center justify-between" : ""
+                )}
+            >
+                <CardHeader className="flex flex-row items-center gap-2 flex-1 min-w-0">
                     <Avatar className="size-14">
-                        <AvatarFallback>{author[0]}</AvatarFallback>
-                        {authorAvatarUrl && <AvatarImage src={authorAvatarUrl} />}
+                        <AvatarFallback>{ author[0] }</AvatarFallback>
+                        { authorAvatarUrl && <AvatarImage src={ authorAvatarUrl }/> }
                     </Avatar>
                     <div className="space-y-2">
-                        <CardTitle>{title}</CardTitle>
-                        <div className="flex flex-row gap-2 leading-tight text-xs text-muted-foreground">
+                        <CardTitle className="text-lg md:text-xl leading-tight">
+                            { title }
+                        </CardTitle>
+                        <div className="flex gap-2 text-sm leading-tight text-muted-foreground">
                             <span>
-                                {author} on {category}
+                                { author } on { category }
                             </span>
-                            <DotIcon className="w-4 h-4" />
-                            <span>{DateTime.fromJSDate(postedAt).toRelative()}</span>
+                            <DotIcon className="w-4 h-4"/>
+                            <span>
+                                { DateTime.fromISO(postedAt).toRelative() }
+                            </span>
                         </div>
                     </div>
                 </CardHeader>
-                {!expanded && (
+                { !expanded && (
                     <CardFooter className="flex justify-end">
                         <Button variant="link" asChild>Reply &rarr;</Button>
                     </CardFooter>
-                )}
-                {expanded && (
-                    <CardFooter className="flex justify-end pb-0">
-                        <Button variant="outline" className="flex flex-col h-14">
-                            <ChevronUpIcon className="size-4 shrink-0" />
-                            <span>{voteCount}</span>
+                ) }
+                { expanded && (
+                    <CardFooter className="hidden md:flex justify-end md:pb-0">
+                        <Button
+                            variant="outline"
+                            className="flex flex-col h-14"
+                        >
+                            <ChevronUpIcon className="size-4 shrink-0"/>
+                            <span>{ voteCount }</span>
                         </Button>
                     </CardFooter>
-                )}
+                ) }
             </Card>
         </Link>
     );
