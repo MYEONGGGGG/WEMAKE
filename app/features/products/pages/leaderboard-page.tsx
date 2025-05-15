@@ -13,6 +13,18 @@ export const meta : Route.MetaFunction = () => {
     ];
 }
 
+/**
+ * # 개념 정리
+ *   - loader 란?
+ *     "백엔드 API로 부터 데이터를 가져오는 함수"
+ *     (React Router, Remix 등에서 사용되는 방식)
+ *
+ *     getProductsByDateRange() 라는 백엔드 요청 함수를 통해
+ *     일별/주별/월별/연별의 제품 목록을 7개씩(*limit) 병렬로 받아와서
+ *     그 결과를 객체로 반환한다.
+ *
+ *     => 데이터를 조회 + 정리하여 UI 컴포넌트로 넘겨주기 위한 역할을 수행함.
+ * */
 export const loader = async () => {
     const [dailyProducts, weeklyProducts, monthlyProducts, yearlyProducts] = await Promise.all([
         getProductsByDateRange({
