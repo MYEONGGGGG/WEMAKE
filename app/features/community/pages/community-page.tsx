@@ -24,11 +24,11 @@ export const loader  = async () => {
     return { topics, posts };
 };
 
-export const clientLoader = async ({
-    serverLoader,
-}: Route.ClientLoaderArgs) => {
-    //track analytics
-};
+// export const clientLoader = async ({
+//     serverLoader,
+// }: Route.ClientLoaderArgs) => {
+//     //track analytics
+// };
 
 export default function CommunityPage({ loaderData }: Route.ComponentProps) {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -150,8 +150,8 @@ export default function CommunityPage({ loaderData }: Route.ComponentProps) {
     );
 }
 
-export function HydrateFallback() {
-    return (
-        <div>Loading...</div>
-    );
-}
+// export function HydrateFallback() {
+//     return (
+//         <div>Loading...</div>
+//     );
+// }

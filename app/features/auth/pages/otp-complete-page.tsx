@@ -1,4 +1,4 @@
-import type { Route } from "./+types/otp-page";
+import type { Route } from "./+types/otp-complete-page";
 import { Form } from "react-router";
 import InputPair from "~/common/components/input-pair";
 import { Button } from "~/common/components";

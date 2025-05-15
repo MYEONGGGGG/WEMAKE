@@ -1,3 +1,4 @@
+import type { Route } from "./+types/home-page";
 import { Link, type MetaFunction } from "react-router";
 import { Button } from "~/common/components";
 import { ProductCard } from "~/features/products/components/product-card";
@@ -5,6 +6,8 @@ import { PostCard } from "~/features/community/components/post-card";
 import { IdeaCard } from "~/features/ideas/components/idea-card";
 import { JobCard } from "~/features/jobs/components/job-card";
 import { TeamCard } from "~/features/teams/team-card";
+import { getProductsByDateRange } from "~/features/products/queries";
+import { DateTime } from "luxon";
 
 export const meta : MetaFunction = () => {
     return [
@@ -13,7 +16,17 @@ export const meta : MetaFunction = () => {
     ];
 }
 
-export default function HomePage() {
+export const loader = async () => {
+    const products = await getProductsByDateRange({
+        startDate: DateTime.now().startOf("day"),
+        endDate: DateTime.now().endOf("day"),
+        limit: 7,
+    });
+
+    return { products }
+};
+
+export default function HomePage({ loaderData }: Route.ComponentProps) {
     return (
       <div className="px-0 md:px-20 space-y-20 md:space-y-40">
 
@@ -32,15 +45,15 @@ export default function HomePage() {
                       </Link>
                   </Button>
               </div>
-              {Array.from({ length: 11 }).map((_, index) => (
+              {loaderData.products.map((product) => (
                   <ProductCard
-                      key={index}
-                      id={`productId-${index}`}
-                      name="Product Name"
-                      description="Product Description"
-                      commentsCount={12}
-                      viewsCount={12}
-                      votesCount={120}
+                      key={product.product_id}
+                      id={product.product_id.toString()}
+                      name={product.name}
+                      description={product.description}
+                      reviewsCount={product.reviews}
+                      viewsCount={product.views}
+                      votesCount={product.upvotes}
                   />
               ))}
           </div>
