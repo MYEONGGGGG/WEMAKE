@@ -25,35 +25,38 @@ export default [
         // "/products" 경로의 index 페이지
         index("features/products/pages/product-page.tsx"),
 
-        // "/products/leaderboards" 관련 페이지 그룹
-        ...prefix("leaderboards", [
-            // "/products/leaderboards" 기본 페이지
-            index("features/products/pages/leaderboard-page.tsx"),
-            // 연도별 순위
-            route(
-                "/yearly/:year",
-                "features/products/pages/yearly-leaderboard-page.tsx"
-            ),
-            // 월별 순위
-            route(
-                "/monthly/:year/:month",
-                "features/products/pages/monthly-leaderboard-page.tsx"
-            ),
-            // 일별 순위
-            route(
-                "/daily/:year/:month/:day",
-                "features/products/pages/daily-leaderboard-page.tsx"
-            ),
-            // 주간 순위
-            route(
-                "/weekly/:year/:week",
-                "features/products/pages/weekly-leaderboard-page.tsx"
-            ),
-            // 기타(월/일/주 외 값)에 따른 redirection 처리 용도
-            route(
-                "/:period",
-                "features/products/pages/leaderboards-redirection-page.tsx",
-            ),
+        // 해당 제품 하위에서 공통 레이아웃을 사용하는 영역
+        layout("features/products/layouts/leaderboard-layout.tsx", [
+            // "/products/leaderboards" 관련 페이지 그룹
+            ...prefix("leaderboards", [
+                // "/products/leaderboards" 기본 페이지
+                index("features/products/pages/leaderboard-page.tsx"),
+                // 연도별 순위
+                route(
+                    "/yearly/:year",
+                    "features/products/pages/yearly-leaderboard-page.tsx"
+                ),
+                // 월별 순위
+                route(
+                    "/monthly/:year/:month",
+                    "features/products/pages/monthly-leaderboard-page.tsx"
+                ),
+                // 일별 순위
+                route(
+                    "/daily/:year/:month/:day",
+                    "features/products/pages/daily-leaderboard-page.tsx"
+                ),
+                // 주간 순위
+                route(
+                    "/weekly/:year/:week",
+                    "features/products/pages/weekly-leaderboard-page.tsx"
+                ),
+                // 기타(월/일/주 외 값)에 따른 redirection 처리 용도
+                route(
+                    "/:period",
+                    "features/products/pages/leaderboards-redirection-page.tsx",
+                ),
+            ]),
         ]),
 
         // "/products/categories" 관련 페이지 그룹
