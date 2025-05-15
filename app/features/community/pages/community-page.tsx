@@ -1,6 +1,6 @@
 import { Hero } from "~/common/components/hero";
 import type { Route } from "./+types/community-page";
-import { Form, Link, useSearchParams } from "react-router";
+import { data, Form, Link, useSearchParams } from "react-router";
 import {
     Button,
     DropdownMenu,
@@ -12,6 +12,7 @@ import { ChevronDownIcon } from "lucide-react";
 import { PERIOD_OPTIONS, SORT_OPTIONS } from "~/features/community/constants";
 import { PostCard } from "~/features/community/components/post-card";
 import { getTopics, getPosts } from "~/features/community/queries";
+import { z } from "zod";
 
 export const meta: Route.MetaFunction = () => {
     return [
@@ -19,16 +20,44 @@ export const meta: Route.MetaFunction = () => {
     ];
 };
 
-export const loader  = async () => {
-    const [topics, posts] = await Promise.all([getTopics(), getPosts()]);
+const searchParamsSchema = z.object({
+    sorting: z.enum(["newest", "popular"]).optional().default("newest"),
+    period: z
+        .enum(["all", "today", "week", "month", "year"])
+        .optional()
+        .default("all"),
+    keyword: z.string().optional(),
+    topic: z.string().optional(),
+});
+
+export const loader  = async ({ request }: Route.LoaderArgs) => {
+    const url = new URL(request.url);
+    const { success, data: parsedData } = searchParamsSchema.safeParse(
+        Object.fromEntries(url.searchParams)
+    );
+    if (!success) {
+        throw data(
+            {
+                error_code: "Invalid_search_params",
+                message: "Invalid search params",
+            },
+            { status: 400 },
+        );
+    }
+
+    const [topics, posts] = await Promise.all([
+        getTopics(),
+        getPosts({
+            limit:20,
+            sorting: parsedData.sorting,
+            period: parsedData.period,
+            keyword: parsedData.keyword,
+            topic: parsedData.topic,
+        })
+    ]);
+
     return { topics, posts };
 };
-
-// export const clientLoader = async ({
-//     serverLoader,
-// }: Route.ClientLoaderArgs) => {
-//     //track analytics
-// };
 
 export default function CommunityPage({ loaderData }: Route.ComponentProps) {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -149,9 +178,3 @@ export default function CommunityPage({ loaderData }: Route.ComponentProps) {
         </div>
     );
 }
-
-// export function HydrateFallback() {
-//     return (
-//         <div>Loading...</div>
-//     );
-// }

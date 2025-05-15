@@ -8,6 +8,7 @@ import { JobCard } from "~/features/jobs/components/job-card";
 import { TeamCard } from "~/features/teams/team-card";
 import { getProductsByDateRange } from "~/features/products/queries";
 import { DateTime } from "luxon";
+import { getPosts } from "~/features/community/queries";
 
 export const meta : MetaFunction = () => {
     return [
@@ -23,7 +24,9 @@ export const loader = async () => {
         limit: 7,
     });
 
-    return { products }
+    const posts = await getPosts({ limit: 7, sorting: "newest" });
+
+    return { products, posts }
 };
 
 export default function HomePage({ loaderData }: Route.ComponentProps) {
@@ -74,15 +77,16 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                   </Button>
               </div>
 
-              {Array.from({ length: 11 }).map((_, index) => (
+              {loaderData.posts.map((post) => (
                   <PostCard
-                      key={index}
-                      id={index}
-                      title="What is the best producitivity tool?"
-                      author="Nico"
-                      authorAvatarUrl="https://github.com/apple.png"
-                      category="Productivity"
-                      postedAt="12 hours ago"
+                      key={post.post_id}
+                      id={post.post_id}
+                      title={post.title}
+                      author={post.author}
+                      authorAvatarUrl={post.author_avatar}
+                      category={post.topic}
+                      postedAt={post.created_at}
+                      votesCount={post.upvotes}
                   />
               ))}
           </div>

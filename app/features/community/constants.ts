@@ -4,7 +4,7 @@ export const SORT_OPTIONS = [
 ] as const;
 
 export const PERIOD_OPTIONS = [
-    "all-time",
+    "all",
     "today",
     "week",
     "month",
