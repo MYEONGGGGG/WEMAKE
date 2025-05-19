@@ -1,6 +1,7 @@
-import type { Route } from ".react-router/types/app/+types/root";
+import type { Route } from "./+types/ideas-page";
 import { Hero } from "~/common/components/hero";
 import { IdeaCard } from "~/features/ideas/components/idea-card";
+import { getGptIdeas } from "~/features/ideas/schema";
 
 export const meta : Route.MetaFunction = () => {
     return [
@@ -9,7 +10,12 @@ export const meta : Route.MetaFunction = () => {
     ];
 }
 
-export default function IdeasPage() {
+export const loader = async () => {
+    const ideas = await getGptIdeas({ limit: 20 });
+    return { ideas };
+};
+
+export default function IdeasPage({ loaderData }: Route.ComponentProps) {
     return (
         <div className="space-y-20">
             <Hero
@@ -17,17 +23,15 @@ export default function IdeasPage() {
                 subtitle="Find ideas for your next project"
             />
             <div className="grid grid-cols-4 gap-4">
-                {Array.from({ length: 10 }).map((_, index) => (
+                {loaderData.ideas.map((idea) => (
                     <IdeaCard
-                        key={index}
-                        id={`ideasId-${index}`}
-                        title="A startup that creates AI-powered generated personal trainer, delivering
-                        customized fitness recommendations and tracking of progress using a mobile app to track
-                        workouts and progress as well as a website to manage the business."
-                        viewsCount={123}
-                        postedAt="12 hours ago"
-                        likesCount={12}
-                        claimed={index % 2 === 0}
+                        key={idea.gpt_idea_id}
+                        id={idea.gpt_idea_id}
+                        title={idea.idea}
+                        viewsCount={idea.views}
+                        postedAt={idea.created_at}
+                        likesCount={idea.likes}
+                        claimed={idea.is_claimed}
                     />
                 ))}
             </div>

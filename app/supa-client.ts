@@ -32,6 +32,11 @@ type Database = MergeDeep<SupabaseDatabase, {
                     string | null
                 >
             };
+            gpt_ideas_view: {
+                Row: SetNonNullable<
+                    SupabaseDatabase["public"]["Views"]["gpt_ideas_view"]["Row"]
+                >
+            };
         };
     }
 }>;
