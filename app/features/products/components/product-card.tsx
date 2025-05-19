@@ -3,7 +3,7 @@ import { Button, Card, CardDescription, CardFooter, CardHeader, CardTitle } from
 import { ChevronUpIcon, EyeIcon, MessageCircleIcon } from "lucide-react";
 
 interface ProductCardProps {
-    id: string;
+    id: number;
     name: string;
     description: string;
     reviewsCount: string;
