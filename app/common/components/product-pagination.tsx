@@ -6,7 +6,6 @@ import {
     PaginationPrevious
 } from "~/common/components/ui/pagination";
 import { useSearchParams } from "react-router";
-import * as sea from "node:sea";
 
 type ProductPaginationProps = {
     totalPages: number;

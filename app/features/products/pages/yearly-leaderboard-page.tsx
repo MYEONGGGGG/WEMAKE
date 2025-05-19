@@ -1,4 +1,4 @@
-import { DateTime, Info } from "luxon";
+import { DateTime } from "luxon";
 import type { Route } from "./+types/yearly-leaderboard-page";
 import { data, isRouteErrorResponse, Link } from "react-router";
 import { z } from "zod";
@@ -67,17 +67,18 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 
     const url = new URL(request.url);
 
-    const products = await getProductsByDateRange({
-        startDate: date.startOf("year"),
-        endDate: date.endOf("year"),
-        limit: PAGE_SIZE,
-        page: Number(url.searchParams.get("page")) || 1,
-    });
-
-    const totalPages = await getProductPagesByDateRange({
-        startDate: date.startOf("year"),
-        endDate: date.endOf("year"),
-    });
+    const [ products, totalPages ] = await Promise.all([
+        getProductsByDateRange({
+            startDate: date.startOf("year"),
+            endDate: date.endOf("year"),
+            limit: PAGE_SIZE,
+            page: Number(url.searchParams.get("page")) || 1,
+        }),
+        getProductPagesByDateRange({
+            startDate: date.startOf("year"),
+            endDate: date.endOf("year"),
+        })
+    ]);
 
     return {
         ...parsedData,
@@ -123,7 +124,7 @@ export default function YearlyLeaderboardPage({ loaderData }: Route.ComponentPro
                 {loaderData.products.map((product) => (
                     <ProductCard
                         key={product.product_id}
-                        id={product.product_id.toString()}
+                        id={product.product_id}
                         name={product.name}
                         description={product.description}
                         reviewsCount={product.reviews}

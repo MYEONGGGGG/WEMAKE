@@ -5,9 +5,9 @@ import ProductPagination from "~/common/components/product-pagination";
 import { getCategory, getCategoryPages, getProductsByCategory } from "~/features/products/queries";
 import { z } from "zod";
 
-export const meta : Route.MetaFunction = () => {
+export const meta = ({ params }: Route.MetaArgs) => {
     return [
-        { title: `Developer Tools | ProductHunt Clone` },
+        { title: `Category #${params.category} | ProductHunt Clone` },
         { name: "description", content: `Browse Developer Tools products` },
     ];
 }
@@ -38,8 +38,8 @@ export default function CategoryPage({ loaderData }: Route.ComponentProps) {
     return (
         <div className="space-y-10">
             <Hero
-                title={"Developer Tools"}
-                subtitle={"Tools for developers to build better faster."}
+                title={loaderData.category.name}
+                subtitle={loaderData.category.description}
             />
 
             <div className="space-y-5 w-full max-w-screen-md mx-auto">

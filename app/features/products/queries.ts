@@ -83,8 +83,8 @@ export const getProductsByCategory = async ({
     page,
 }: {
     categoryId: number,
-    page: number                            }
-) => {
+    page: number
+}) => {
     const { data, error } = await client
         .from("products")
         .select(productListSelect)
@@ -98,7 +98,7 @@ export const getProductsByCategory = async ({
 export const getCategoryPages = async (categoryId: number) => {
     const { count, error } = await client
         .from("products")
-        .select(`product_id`, {count:"exact", head:true})
+        .select(`product_id`, { count: "exact", head: true })
         .eq("category_id", categoryId);
 
     if (error) throw error;

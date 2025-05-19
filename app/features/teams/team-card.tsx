@@ -27,12 +27,12 @@ export function TeamCard({
 }: TeamCardProps) {
     return (
         <Link to={`/teams/${id}`} className="block">
-            <Card className="bg-transparent hover:bg-card/50 transition-colors flex flex-col justify-between">
+            <Card className="bg-transparent hover:bg-card/50 flex flex-col justify-between transition-colors h-full">
                 <CardHeader className="flex flex-row items-center">
                     <CardTitle className="text-base leading-loose">
                         <Badge variant="secondary" className="inline-flex shadow-sm items-center text-base">
                             <span>{leaderUsername}</span>
-                            <Avatar>
+                            <Avatar className="size-5">
                                 <AvatarFallback>{leaderUsername[0]}</AvatarFallback>
                                 {leaderAvatarUrl ? <AvatarImage src={leaderAvatarUrl} /> : null}
                             </Avatar>
@@ -48,7 +48,7 @@ export function TeamCard({
                     </CardTitle>
                 </CardHeader>
                 <CardFooter className="justify-end">
-                    <Button variant="link" asChild>
+                    <Button variant="link">
                         Join team &rarr;
                     </Button>
                 </CardFooter>

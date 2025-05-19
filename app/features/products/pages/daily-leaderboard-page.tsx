@@ -65,17 +65,18 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 
     const url = new URL(request.url);
 
-    const products = await getProductsByDateRange({
-        startDate: date.startOf("day"),
-        endDate: date.endOf("day"),
-        limit: PAGE_SIZE,
-        page: Number(url.searchParams.get("page")) || 1,
-    });
-
-    const totalPages = await getProductPagesByDateRange({
-        startDate: date.startOf("day"),
-        endDate: date.endOf("day"),
-    });
+    const [ products, totalPages ] = await Promise.all([
+        getProductsByDateRange({
+            startDate: date.startOf("day"),
+            endDate: date.endOf("day"),
+            limit: PAGE_SIZE,
+            page: Number(url.searchParams.get("page")) || 1,
+        }),
+        getProductPagesByDateRange({
+            startDate: date.startOf("day"),
+            endDate: date.endOf("day"),
+        })
+    ]);
 
     return {
         ...parsedData,
@@ -119,7 +120,7 @@ export default function DailyLeaderboardPage({ loaderData }: Route.ComponentProp
                 {loaderData.products.map((product) => (
                     <ProductCard
                         key={product.product_id}
-                        id={product.product_id.toString()}
+                        id={product.product_id}
                         name={product.name}
                         description={product.description}
                         reviewsCount={product.reviews}

@@ -46,14 +46,20 @@ export const loader = async ({request}: Route.LoaderArgs) => {
         type: parsedData.type,
         salary: parsedData.salary,
     });
+
     return { jobs };
 };
 
 export default function jobsPage({ loaderData }: Route.ComponentProps) {
     const [searchParams, setSearchParams] = useSearchParams();
     const onFilterClick = (key: string, value: string) => {
-        searchParams.set(key, value);
-        setSearchParams(searchParams);
+        if (value === searchParams.get(key)) {
+            searchParams.delete(key);
+            setSearchParams(searchParams);
+        } else {
+            searchParams.set(key, value);
+            setSearchParams(searchParams);
+        }
     };
 
     return (

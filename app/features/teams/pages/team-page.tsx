@@ -45,7 +45,7 @@ export default function TeamPage() {
                             value: 50
                         }
                     ].map((item) => (
-                        <Card>
+                        <Card key={item.title}>
                             <CardHeader>
                                 <CardTitle className="text-sm font-medium text-muted-foreground">
                                     {item.title}

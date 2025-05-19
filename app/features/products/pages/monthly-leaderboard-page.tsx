@@ -71,17 +71,18 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 
     const url = new URL(request.url);
 
-    const products = await getProductsByDateRange({
-        startDate: date.startOf("month"),
-        endDate: date.endOf("month"),
-        limit: PAGE_SIZE,
-        page: Number(url.searchParams.get("page")) || 1,
-    });
-
-    const totalPages = await getProductPagesByDateRange({
-        startDate: date.startOf("month"),
-        endDate: date.endOf("month"),
-    });
+    const [ products, totalPages ] = await Promise.all([
+        getProductsByDateRange({
+            startDate: date.startOf("month"),
+            endDate: date.endOf("month"),
+            limit: PAGE_SIZE,
+            page: Number(url.searchParams.get("page")) || 1,
+        }),
+        getProductPagesByDateRange({
+            startDate: date.startOf("month"),
+            endDate: date.endOf("month"),
+        })
+    ]);
 
     return {
         ...parsedData,
@@ -131,7 +132,7 @@ export default function MonthlyLeaderboardPage({ loaderData }: Route.ComponentPr
                 {loaderData.products.map((product) => (
                     <ProductCard
                         key={product.product_id}
-                        id={product.product_id.toString()}
+                        id={product.product_id}
                         name={product.name}
                         description={product.description}
                         reviewsCount={product.reviews}
