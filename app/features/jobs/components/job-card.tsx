@@ -1,8 +1,9 @@
 import { Badge, Button, Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/common/components";
 import { Link } from "react-router";
+import { DateTime } from "luxon";
 
 interface JobsCardProps {
-    id: string;
+    id: number;
     company: string;
     companyLogoUrl: string;
     companyHq: string;
@@ -36,14 +37,14 @@ export function JobCard({
                         />
                         <div className="space-x-2">
                             <span className="text-sm text-accent-foreground">{company}</span>
-                            <span className="text-xs text-muted-foreground"> {postedAt}</span>
+                            <span className="text-xs text-muted-foreground"> {DateTime.fromISO(postedAt).toRelative()}</span>
                         </div>
                     </div>
                     <CardTitle>{title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <Badge variant="outline">{type}</Badge>
-                    <Badge variant="outline">{positionLocation}</Badge>
+                    <Badge variant="outline" className="capitalize">{type}</Badge>
+                    <Badge variant="outline" className="capitalize">{positionLocation}</Badge>
                 </CardContent>
                 <CardFooter className="flex justify-between">
                     <div className="flex flex-col">

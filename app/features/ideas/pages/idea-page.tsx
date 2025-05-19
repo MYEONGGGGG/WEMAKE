@@ -2,7 +2,7 @@ import type { Route } from "./+types/idea-page";
 import { Hero } from "~/common/components/hero";
 import { DotIcon, EyeIcon, HeartIcon } from "lucide-react";
 import { Button } from "~/common/components";
-import { getGptIdea } from "~/features/ideas/schema";
+import { getGptIdea } from "~/features/ideas/queries";
 import { DateTime } from "luxon";
 
 export const meta = ({

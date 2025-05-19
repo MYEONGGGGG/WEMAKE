@@ -1,7 +1,7 @@
 import type { Route } from "./+types/ideas-page";
 import { Hero } from "~/common/components/hero";
 import { IdeaCard } from "~/features/ideas/components/idea-card";
-import { getGptIdeas } from "~/features/ideas/schema";
+import { getGptIdeas } from "~/features/ideas/queries";
 
 export const meta : Route.MetaFunction = () => {
     return [
