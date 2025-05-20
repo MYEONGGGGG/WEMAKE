@@ -75,7 +75,7 @@ export default function LeaderboardPage({ loaderData }: Route.ComponentProps) {
                         key={product.product_id}
                         id={product.product_id}
                         name={product.name}
-                        description={product.description}
+                        description={product.tagline}
                         reviewsCount={product.reviews}
                         viewsCount={product.views}
                         votesCount={product.upvotes}
@@ -103,7 +103,7 @@ export default function LeaderboardPage({ loaderData }: Route.ComponentProps) {
                         key={product.product_id}
                         id={product.product_id}
                         name={product.name}
-                        description={product.description}
+                        description={product.tagline}
                         reviewsCount={product.reviews}
                         viewsCount={product.views}
                         votesCount={product.upvotes}
@@ -131,7 +131,7 @@ export default function LeaderboardPage({ loaderData }: Route.ComponentProps) {
                         key={product.product_id}
                         id={product.product_id}
                         name={product.name}
-                        description={product.description}
+                        description={product.tagline}
                         reviewsCount={product.reviews}
                         viewsCount={product.views}
                         votesCount={product.upvotes}
@@ -159,7 +159,7 @@ export default function LeaderboardPage({ loaderData }: Route.ComponentProps) {
                         key={product.product_id}
                         id={product.product_id}
                         name={product.name}
-                        description={product.description}
+                        description={product.tagline}
                         reviewsCount={product.reviews}
                         viewsCount={product.views}
                         votesCount={product.upvotes}
