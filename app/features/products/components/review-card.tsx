@@ -1,10 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "~/common/components";
 import { StarIcon } from "lucide-react";
+import { DateTime } from "luxon";
 
 interface ReviewCardProps {
     username: string;
     handle: string;
-    avatarUrl: string;
+    avatarUrl: string | null;
     rating: number;
     content: string;
     postedAt: string;
@@ -23,7 +24,7 @@ export function ReviewCard({
             <header className="flex items-center gap-2">
                 <Avatar>
                     <AvatarFallback>N</AvatarFallback>
-                    <AvatarImage src={avatarUrl} alt={username} />
+                    {avatarUrl ? <AvatarImage src={avatarUrl} /> : null}
                 </Avatar>
                 <div>
                     <h4 className="text-lg font-bold">{username}</h4>
@@ -41,7 +42,7 @@ export function ReviewCard({
 
             <footer>
                 <time className="text-xs text-muted-foreground">
-                    {postedAt}
+                    {DateTime.fromISO(postedAt).toRelative()}
                 </time>
             </footer>
         </div>
