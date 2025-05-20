@@ -111,5 +111,4 @@ npx shadcn@latest add <컴포넌트명> --overwrite
 - **소속:** (주)멘토아이티 연구전담팀
 - **이름:** 최명은
 - **이메일:** c_me95@mentorit.co.kr
-- **GitHub:** [MYEONGGGGG/cme95](https://github.com/MYEONGGGGG | https://github.com/cme95)
 </details>
