@@ -60,6 +60,16 @@ export const getPosts = async ({
     return data;
 }
 
+export const getPostById = async (postId: string) => {
+    const { data, error } = await client
+        .from("community_post_detail")
+        .select("*")
+        .eq("post_id", Number(postId))
+        .single();
+    if (error) throw error;
+    return data;
+};
+
 
 
 /** Drizzle ORM 방식 */
