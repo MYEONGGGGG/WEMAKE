@@ -15,7 +15,7 @@
 - **상태관리:** Zustand(전역 상태), React Query(서버 상태)
 - **스타일링:** Tailwind CSS, MagicUI, ShadcnUI
 
-#### 백엔트(Backend)
+#### 백엔드(Backend)
 - **플랫폼:** Supabase(ProstgreSQL 기반)
 - **ORM:** Drizzle ORM
 
