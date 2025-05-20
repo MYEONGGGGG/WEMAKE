@@ -11,7 +11,7 @@ import {
 import { Form, Link } from "react-router";
 import { ChevronUpIcon, DotIcon } from "lucide-react";
 import { Reply } from "~/features/community/components/reply";
-import { getPostById } from "~/features/community/queries";
+import { getPostById, getReplies } from "~/features/community/queries";
 import { DateTime } from "luxon";
 
 export const meta: Route.MetaFunction = ({ params }) => {
@@ -21,8 +21,12 @@ export const meta: Route.MetaFunction = ({ params }) => {
 };
 
 export const loader  = async ({ params }: Route.LoaderArgs) => {
-    const post = await getPostById(params.postId);
-    return { post };
+    const [ post, replies ] = await Promise.all([
+        getPostById(params.postId),
+        getReplies(params.postId),
+    ]);
+
+    return { post, replies };
 }
 
 export default function PostPage({ loaderData }: Route.ComponentProps) {
@@ -62,7 +66,7 @@ export default function PostPage({ loaderData }: Route.ComponentProps) {
                             <span>{loaderData.post.upvotes}</span>
                         </Button>
 
-                        <div className="space-y-20">
+                        <div className="space-y-20 w-full">
                             <div className="space-y-2">
                                 <h2 className="text-3xl font-bold">{loaderData.post.title}</h2>
                                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -101,14 +105,17 @@ export default function PostPage({ loaderData }: Route.ComponentProps) {
                                     {loaderData.post.replies} Replies
                                 </h4>
                                 <div className="flex flex-col gap-5">
-                                    <Reply
-                                        username="Nicolas"
-                                        avatarUrl="https://github.com/microsoft.png"
-                                        content="I've been using Todoist for a while now, and it's really great.
-                                        It's simple, clean, and has a lot of features."
-                                        timestamp="12 hours ago"
-                                        topLevel
-                                    />
+                                    {loaderData.replies.map((reply) => (
+                                        <Reply
+                                            key={reply.post_reply_id}
+                                            username={reply.user.name}
+                                            avatarUrl={reply.user.avatar}
+                                            content={reply.reply}
+                                            timestamp={reply.created_at}
+                                            topLevel={true}
+                                            replies={reply.post_replies}
+                                        />
+                                    ))}
                                 </div>
                             </div>
                         </div>
