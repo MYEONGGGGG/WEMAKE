@@ -1,13 +1,26 @@
 import { NavLink, Outlet } from "react-router";
 import { ChevronUpIcon, StarIcon } from "lucide-react";
 import { Button, buttonVariants } from "~/common/components";
-import type { Route } from ".react-router/types/app/features/products/pages/+types/product-overview-page";
+import type { Route } from "./+types/product-overview-layout";
 import { cn } from "~/lib/utils";
 import { useIsMobile } from "~/hooks/use-mobile";
+import { getProductById } from "~/features/products/queries";
 
-export default function ProductOverviewLayout({
-  params: { productId },
-}: Route.ComponentProps) {
+export function meta({ data }: Route.MetaArgs) {
+    return [
+        { title: `${data.product.name} Overview | WeMaKe` },
+        { name: "description", content: "Product overview and reviews" },
+    ];
+};
+
+export const loader = async ({
+    params
+}: Route.LoaderArgs & { params: {productId: string} }) => {
+    const product = await getProductById(params.productId);
+    return { product };
+}
+
+export default function ProductOverviewLayout({loaderData}: Route.ComponentProps) {
     const isMobile = useIsMobile();
 
     return (
@@ -18,15 +31,23 @@ export default function ProductOverviewLayout({
                 <div className="flex gap-3 md:gap-10">
                     <div className="size-40 rounded-xl shadow-xl bg-primary/50"></div>
                     <div>
-                        <h1 className="text-2xl md:text-5xl font-bold">Product Name</h1>
-                        <p className="text-base md:text-2xl font-light">Product Description</p>
+                        <h1 className="text-2xl md:text-5xl font-bold">{loaderData.product.name}</h1>
+                        <p className="text-base md:text-2xl font-light">{loaderData.product.tagline}</p>
                         <div className="mt-5 flex items-center gap-2">
                             <div className="flex text-yellow-400">
                                 {Array.from({length: 5}).map((_, i) => (
-                                    <StarIcon className="size-3 md:size-4" fill="currentColor" key={i} />
+                                    <StarIcon
+                                        key={i}
+                                        className="size-3 md:size-4"
+                                        fill={i < Math.floor(loaderData.product.average_rating)
+                                            ? "currentColor"
+                                            : "none"}
+                                    />
                                 ))}
                             </div>
-                            <span className="text-xs md:text-base text-muted-foreground">100 reviews</span>
+                            <span className="text-xs md:text-base text-muted-foreground">
+                                {loaderData.product.reviews} reviews
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -45,7 +66,7 @@ export default function ProductOverviewLayout({
                         className="text-lg h-14 px-10 flex items-center gap-2"
                     >
                         <ChevronUpIcon className="size-4" />
-                        Upvote (100)
+                        {loaderData.product.upvotes}
                     </Button>
                 </div>
 
@@ -78,7 +99,7 @@ export default function ProductOverviewLayout({
                             isActive && "bg-accent text-foreground"
                         )
                     }
-                    to={`/products/${productId}/overview`}
+                    to={`/products/${loaderData.product.product_id}/overview`}
                 >
                     Overview
                 </NavLink>
@@ -90,14 +111,20 @@ export default function ProductOverviewLayout({
                             isActive && "bg-accent text-foreground"
                         )
                     }
-                    to={`/products/${productId}/reviews`}
+                    to={`/products/${loaderData.product.product_id}/reviews`}
                 >
                     Reviews
                 </NavLink>
             </div>
 
-            {/* 자식 요소 */}
-            <Outlet />
+            <div>
+                {/* 자식 요소 */}
+                <Outlet context={{
+                    product_id: loaderData.product.product_id,
+                    description: loaderData.product.description,
+                    how_it_works: loaderData.product.how_it_works,
+                }} />
+            </div>
         </div>
     );
 }
