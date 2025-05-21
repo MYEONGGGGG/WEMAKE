@@ -26,5 +26,8 @@ export default defineConfig({
         rollupOptions: {
             external: ['.well-known/appspecific/com.chrome.devtools.json']
         }
-    }
+    },
+    // optimizeDeps: {
+    //     include: ["@supabase/supabase-js"]
+    // }
 });

@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { SupabaseClient } from "@supabase/supabase-js";
+import { type SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "~/supa-client";
 import { PAGE_SIZE } from "~/features/products/constants";
 

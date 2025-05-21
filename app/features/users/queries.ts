@@ -1,6 +1,6 @@
 // 유저 기능과 관련된 모든 쿼리를 모아두는 곳
 
-import { SupabaseClient } from "@supabase/supabase-js";
+import { type SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "~/supa-client";
 import { productListSelect } from "~/features/products/queries";
 
