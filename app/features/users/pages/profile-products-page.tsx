@@ -1,6 +1,7 @@
 import type { Route } from "./+types/profile-products-page";
 import { ProductCard } from "~/features/products/components/product-card";
 import { getUserProducts } from "~/features/users/queries";
+import { makeSSRClient } from "~/supa-client";
 
 export const meta: Route.MetaFunction = () => {
     return [
@@ -8,8 +9,9 @@ export const meta: Route.MetaFunction = () => {
     ];
 };
 
-export const loader = async ({params}: Route.LoaderArgs) => {
-    const products = await getUserProducts(params.username);
+export const loader = async ({params, request}: Route.LoaderArgs) => {
+    const { client, headers } = makeSSRClient(request);
+    const products = await getUserProducts(client, { username: params.username });
     return { products };
 };
 

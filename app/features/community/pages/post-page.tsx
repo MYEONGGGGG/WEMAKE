@@ -13,6 +13,7 @@ import { ChevronUpIcon, DotIcon } from "lucide-react";
 import { Reply } from "~/features/community/components/reply";
 import { getPostById, getReplies } from "~/features/community/queries";
 import { DateTime } from "luxon";
+import { makeSSRClient } from "~/supa-client";
 
 export const meta: Route.MetaFunction = ({ params }) => {
     return [
@@ -20,10 +21,11 @@ export const meta: Route.MetaFunction = ({ params }) => {
     ];
 };
 
-export const loader  = async ({ params }: Route.LoaderArgs) => {
+export const loader  = async ({ params, request }: Route.LoaderArgs) => {
+    const { client, headers } = makeSSRClient(request);
     const [ post, replies ] = await Promise.all([
-        getPostById(params.postId),
-        getReplies(params.postId),
+        getPostById(client, { postId: params.postId }),
+        getReplies(client, { postId: params.postId }),
     ]);
 
     return { post, replies };

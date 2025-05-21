@@ -1,10 +1,11 @@
 import type { Route } from "./+types/profile-page";
 import { useOutletContext } from "react-router";
-import client from "~/supa-client";
+import { makeSSRClient } from "~/supa-client";
 import { getUserIdByUsername } from "~/features/users/queries";
 
-export const loader = async ({params}: Route.LoaderArgs) => {
-    const user = await getUserIdByUsername(params.username);
+export const loader = async ({params, request}: Route.LoaderArgs) => {
+    const { client, headers } = makeSSRClient(request);
+    const user = await getUserIdByUsername(client, { username: params.username });
 
     // 유저가 존재할 경우 track_event 함수 호출
     if (user) {

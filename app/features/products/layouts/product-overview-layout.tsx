@@ -6,6 +6,7 @@ import { cn } from "~/lib/utils";
 import { useIsMobile } from "~/hooks/use-mobile";
 import { getProductById } from "~/features/products/queries";
 import { Link } from "react-router";
+import { makeSSRClient } from "~/supa-client";
 
 export function meta({ data }: Route.MetaArgs) {
     return [
@@ -15,9 +16,10 @@ export function meta({ data }: Route.MetaArgs) {
 };
 
 export const loader = async ({
-    params
+    params, request
 }: Route.LoaderArgs & { params: {productId: string} }) => {
-    const product = await getProductById(params.productId);
+    const { client, headers } = makeSSRClient(request);
+    const product = await getProductById(client, { productId: params.productId });
     return { product };
 }
 

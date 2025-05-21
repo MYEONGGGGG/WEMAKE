@@ -7,7 +7,7 @@ export const meta: Route.MetaFunction = () => {
     ];
 };
 
-export default function DashboardIdeasPage() {
+export default function DashboardIdeasPage({loaderData}: Route.ComponentProps) {
     return(
         <div className="space-y-5 h-full">
             <h1 className="text-2xl font-semibold mb-6">Claimed Ideas</h1>
@@ -15,7 +15,7 @@ export default function DashboardIdeasPage() {
                 {Array.from({length: 5}, (_, index) => (
                     <IdeaCard
                         key={`ideaId-${index}`}
-                        id={`ideaId-${index}`}
+                        id={index}
                         title="A startup that creates an AI-powered generated personal trainer, delivering
                         customized fitness recommendations and tracking of progress using a mobile app to track
                         workouts and progress as well as a website to manage the business."

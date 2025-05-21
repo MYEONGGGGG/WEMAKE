@@ -6,6 +6,7 @@ import ProductPagination from "~/common/components/product-pagination";
 import { Form } from "react-router";
 import { Button, Input } from "~/common/components";
 import { getPagesBySearch, getProductsBySearch } from "~/features/products/queries";
+import { makeSSRClient } from "~/supa-client";
 
 export const meta : Route.MetaFunction = () => {
     return [
@@ -32,12 +33,13 @@ export async function loader({ request }: Route.LoaderArgs) {
         return { products: [], totalPages: 1 };
     }
 
+    const { client, headers } = makeSSRClient(request);
     const [ products, totalPages ] = await Promise.all([
-        getProductsBySearch({
+        getProductsBySearch(client, {
             query: parsedData.query,
             page: Number(parsedData.page),
         }),
-        getPagesBySearch({
+        getPagesBySearch(client, {
             query: parsedData.query,
         })
     ]);

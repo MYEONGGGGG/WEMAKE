@@ -4,6 +4,7 @@ import { ProductCard } from "~/features/products/components/product-card";
 import ProductPagination from "~/common/components/product-pagination";
 import { getCategory, getCategoryPages, getProductsByCategory } from "~/features/products/queries";
 import { z } from "zod";
+import { makeSSRClient } from "~/supa-client";
 
 export const meta = ({ params }: Route.MetaArgs) => {
     return [
@@ -25,12 +26,13 @@ export const loader = async ({params, request}: Route.LoaderArgs) => {
         throw new Response("Invalid params", { status: 400 });
     }
 
-    const category = await getCategory(data.category);
-    const products = await getProductsByCategory({
+    const { client, headers } = makeSSRClient(request);
+    const category = await getCategory(client, { categoryId: data.category });
+    const products = await getProductsByCategory(client, {
         categoryId: data.category,
         page: Number(page),
     });
-    const totalPages = await getCategoryPages(data.category);
+    const totalPages = await getCategoryPages(client, { categoryId: data.category });
     return { category, products, totalPages };
 };
 

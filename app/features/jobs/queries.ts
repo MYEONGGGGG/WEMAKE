@@ -1,4 +1,5 @@
-import client from "~/supa-client";
+import { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "~/supa-client";
 
 // 유니언 리터럴 타입 정의
 type JobType = "full-time" | "part-time" | "remote" | "internship" | "freelance";
@@ -32,7 +33,9 @@ const isValidSalary = (v: string): v is SalaryRange =>
 
 
 // 메인 함수
-export const getJobs = async ({
+export const getJobs = async (
+    client: SupabaseClient<Database>,
+{
     limit,
     location,
     type,
@@ -74,7 +77,10 @@ export const getJobs = async ({
     return data;
 };
 
-export const getJobById = async (jobId: string) => {
+export const getJobById = async (
+    client: SupabaseClient<Database>,
+    { jobId } : { jobId: string }
+) => {
     const { data, error } = await client
         .from("jobs")
         .select("*")

@@ -7,6 +7,7 @@ import { data, useSearchParams } from "react-router";
 import { cn } from "~/lib/utils";
 import { getJobs } from "~/features/jobs/queries";
 import { z } from "zod";
+import { makeSSRClient } from "~/supa-client";
 
 export const meta: Route.MetaFunction = () => {
     return [
@@ -40,7 +41,8 @@ export const loader = async ({request}: Route.LoaderArgs) => {
         );
     }
 
-    const jobs = await getJobs({
+    const { client, headers } = makeSSRClient(request);
+    const jobs = await getJobs(client, {
         limit: 40,
         location: parsedData.location,
         type: parsedData.type,

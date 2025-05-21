@@ -12,6 +12,7 @@ import { getPosts } from "~/features/community/queries";
 import { getGptIdeas } from "~/features/ideas/queries";
 import { getJobs } from "~/features/jobs/queries";
 import { getTeams } from "~/features/teams/queries";
+import { makeSSRClient } from "~/supa-client";
 
 export const meta : MetaFunction = () => {
     return [
@@ -20,20 +21,22 @@ export const meta : MetaFunction = () => {
     ];
 }
 
-export const loader = async () => {
+export const loader = async ({request}: Route.LoaderArgs) => {
+    const { client, headers } = makeSSRClient(request);
+
     const [products, posts, ideas, jobs, teams] = await Promise.all([
-        getProductsByDateRange({
+        getProductsByDateRange(client, {
             startDate: DateTime.now().startOf("day"),
             endDate: DateTime.now().endOf("day"),
             limit: 7,
         }),
-        getPosts({ limit: 7, sorting: "newest" }),
-        getGptIdeas({ limit: 7 }),
-        getJobs({ limit: 11 }),
-        getTeams({ limit: 7 }),
+        getPosts(client, { limit: 7, sorting: "newest" }),
+        getGptIdeas(client, { limit: 7 }),
+        getJobs(client, { limit: 11 }),
+        getTeams(client, { limit: 7 }),
     ]);
 
-    return { products, posts, ideas, jobs, teams }
+    return { products, posts, ideas, jobs, teams };
 };
 
 export default function HomePage({ loaderData }: Route.ComponentProps) {

@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createBrowserClient, createServerClient, parseCookieHeader, serializeCookieHeader } from "@supabase/ssr";
 import type { MergeDeep, SetNonNullable, SetFieldType } from "type-fest";
 import type { Database as SupabaseDatabase } from "database.types";
 
@@ -19,7 +19,7 @@ const supabaseKey = process.env.SUPABASE_ANON_KEY;
  *  MergeDeep + SetNotNullable을 써서, 특정 뷰의 Row 타입을 non-null로 재정의하기 위함.
  *  (타입 정의를 하더라도 "database.types" 파일에 영향을 주는건 없음! 타입스크립트에서 타입을 더 정확하게 추론 및 null 체크 제거 목적으로 사용!)
  * */
-type Database = MergeDeep<SupabaseDatabase, {
+export type Database = MergeDeep<SupabaseDatabase, {
     public: {
         Views: {
             community_post_list_view: {
@@ -50,9 +50,38 @@ type Database = MergeDeep<SupabaseDatabase, {
     }
 }>;
 
-const client = createClient<Database>(
+export const browserClient = createBrowserClient<Database>(
     supabaseUrl!,
     supabaseKey!
 );
 
-export default client;
+/** makeSSRClient 힘수는
+ * 유저의 요청을 받아서, 쿼리를 추출한 다음에 서버 사이드 클라이언트에게 전달해주는 역할을 수행함.
+ * */
+export const makeSSRClient = (request: Request) => {
+    const headers = new Headers();
+    const serverSideClient = createServerClient<Database>(
+        supabaseUrl!,
+        supabaseKey!,
+        {
+            cookies: {
+                getAll() {
+                    return parseCookieHeader(request.headers.get("Cookie") ?? "")
+                },
+                setAll(cookiesToSet) {
+                    cookiesToSet.forEach(({ name, value, options }) => {
+                        headers.append(
+                            "Set-Cookie",
+                            serializeCookieHeader(name, value, options)
+                        );
+                    })
+                },
+            },
+        }
+    );
+
+    return {
+        client: serverSideClient,
+        headers
+    };
+};

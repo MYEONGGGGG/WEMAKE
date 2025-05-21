@@ -13,6 +13,7 @@ import { PERIOD_OPTIONS, SORT_OPTIONS } from "~/features/community/constants";
 import { PostCard } from "~/features/community/components/post-card";
 import { getTopics, getPosts } from "~/features/community/queries";
 import { z } from "zod";
+import { makeSSRClient } from "~/supa-client";
 
 export const meta: Route.MetaFunction = () => {
     return [
@@ -45,9 +46,10 @@ export const loader  = async ({ request }: Route.LoaderArgs) => {
         );
     }
 
+    const { client, headers } = makeSSRClient(request);
     const [topics, posts] = await Promise.all([
-        getTopics(),
-        getPosts({
+        getTopics(client),
+        getPosts(client, {
             limit:20,
             sorting: parsedData.sorting,
             period: parsedData.period,

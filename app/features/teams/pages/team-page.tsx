@@ -13,6 +13,7 @@ import {
 import { Form } from "react-router";
 import InputPair from "~/common/components/input-pair";
 import { getTeamById } from "~/features/teams/queries";
+import { makeSSRClient } from "~/supa-client";
 
 export const meta: Route.MetaFunction = () => {
     return [
@@ -20,8 +21,9 @@ export const meta: Route.MetaFunction = () => {
     ];
 };
 
-export const loader = async ({ params }: Route.LoaderArgs) => {
-    const team = await getTeamById(params.teamId);
+export const loader = async ({ params, request }: Route.LoaderArgs) => {
+    const { client, headers } = makeSSRClient(request);
+    const team = await getTeamById(client, { teamId: params.teamId });
     return { team };
 };
 

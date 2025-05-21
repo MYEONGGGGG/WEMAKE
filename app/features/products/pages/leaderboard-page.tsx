@@ -5,6 +5,7 @@ import { Link } from "react-router";
 import { ProductCard } from "~/features/products/components/product-card";
 import { getProductsByDateRange } from "~/features/products/queries";
 import { DateTime } from "luxon";
+import { makeSSRClient } from "~/supa-client";
 
 export const meta : Route.MetaFunction = () => {
     return [
@@ -25,24 +26,25 @@ export const meta : Route.MetaFunction = () => {
  *
  *     => 데이터를 조회 + 정리하여 UI 컴포넌트로 넘겨주기 위한 역할을 수행함.
  * */
-export const loader = async () => {
+export const loader = async ({request}: Route.LoaderArgs) => {
+    const { client, headers } = makeSSRClient(request);
     const [dailyProducts, weeklyProducts, monthlyProducts, yearlyProducts] = await Promise.all([
-        getProductsByDateRange({
+        getProductsByDateRange(client, {
             startDate: DateTime.now().startOf("day"),
             endDate: DateTime.now().endOf("day"),
             limit: 7,
         }),
-        getProductsByDateRange({
+        getProductsByDateRange(client, {
             startDate: DateTime.now().startOf("week"),
             endDate: DateTime.now().endOf("week"),
             limit: 7,
         }),
-        getProductsByDateRange({
+        getProductsByDateRange(client, {
             startDate: DateTime.now().startOf("month"),
             endDate: DateTime.now().endOf("month"),
             limit: 7,
         }),
-        getProductsByDateRange({
+        getProductsByDateRange(client, {
             startDate: DateTime.now().startOf("year"),
             endDate: DateTime.now().endOf("year"),
             limit: 7,

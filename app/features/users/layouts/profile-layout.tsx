@@ -12,12 +12,14 @@ import {
 import { cn } from "~/lib/utils";
 import type { Route } from "./+types/profile-layout";
 import { getUserProfile } from "~/features/users/queries";
+import { makeSSRClient } from "~/supa-client";
 
 export const loader  = async ({
-    params
+    params,
+    request
 }: Route.LoaderArgs & { params: { username: string } }) => {
-    const user = await getUserProfile(params.username);
-
+    const { client, headers } = makeSSRClient(request);
+    const user = await getUserProfile(client, { username: params.username });
     return { user };
 }
 

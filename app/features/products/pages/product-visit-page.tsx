@@ -1,11 +1,11 @@
 // UI가 없는 페이지
 // 로직을 실행하고 유저를 URL로 보내는 작업을 한다.
-
-import client from "~/supa-client";
 import type { Route } from "./+types/categories-page";
 import { redirect } from "react-router";
+import { makeSSRClient } from "~/supa-client";
 
-export const loader = async ({params}: Route.LoaderArgs) => {
+export const loader = async ({params, request}: Route.LoaderArgs) => {
+    const { client, headers } = makeSSRClient(request);
     const { data, error } = await client
         .from("products")
         .select("url")
