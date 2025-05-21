@@ -1,4 +1,21 @@
 import { useOutletContext } from "react-router";
+import type { Route } from "./+types/product-overview-page";
+import client from "~/supa-client";
+
+export const loader = async ({params}: Route.LoaderArgs) => {
+    try {
+        await client.rpc("track_event", {
+            event_type: "product_view",
+            event_data: {
+                product_id: params.productId,
+            },
+        });
+    } catch (error) {
+        console.error("Event tracking error:", error);
+    }
+
+    return null;
+};
 
 export default function ProductOverviewPage() {
     const { description, how_it_works } = useOutletContext<{

@@ -5,6 +5,7 @@ import type { Route } from "./+types/product-overview-layout";
 import { cn } from "~/lib/utils";
 import { useIsMobile } from "~/hooks/use-mobile";
 import { getProductById } from "~/features/products/queries";
+import { Link } from "react-router";
 
 export function meta({ data }: Route.MetaArgs) {
     return [
@@ -26,7 +27,7 @@ export default function ProductOverviewLayout({loaderData}: Route.ComponentProps
     return (
         <div className="space-y-10">
             {/* header */}
-            <div className="flex flex-col md:flex-row md:justify-between gap-6">
+            <div className="flex flex-col md:flex-row md:justify-between gap-6 w-full">
                 {/* Left */}
                 <div className="flex gap-3 md:gap-10">
                     <div className="size-40 rounded-xl shadow-xl bg-primary/50"></div>
@@ -53,20 +54,23 @@ export default function ProductOverviewLayout({loaderData}: Route.ComponentProps
                 </div>
 
                 {/* Right - Tablet and Desktop */}
-                <div className="hidden md:flex flex-row gap-4 md:gap-10 w-full items-start">
+                <div className="hidden md:flex flex-row gap-4 md:gap-10 items-start">
                     <Button
                         variant="secondary"
                         size="lg"
                         className="text-lg h-14 px-10"
+                        asChild
                     >
-                        Visit Website
+                        <Link to={`/products/${loaderData.product.product_id}/visit`}>
+                            Visit Website
+                        </Link>
                     </Button>
                     <Button
                         size="lg"
                         className="text-lg h-14 px-10 flex items-center gap-2"
                     >
                         <ChevronUpIcon className="size-4" />
-                        {loaderData.product.upvotes}
+                        Upvote ({loaderData.product.upvotes})
                     </Button>
                 </div>
 
@@ -76,15 +80,18 @@ export default function ProductOverviewLayout({loaderData}: Route.ComponentProps
                         variant="secondary"
                         size="sm"
                         className="text-sm h-10 px-6"
+                        asChild
                     >
-                        Visit Website
+                        <Link to={`/products/${loaderData.product.product_id}/visit`}>
+                            Visit Website
+                        </Link>
                     </Button>
                     <Button
                         size="sm"
                         className="text-sm h-10 px-6 flex items-center gap-2"
                     >
                         <ChevronUpIcon className="size-4" />
-                        Upvote (100)
+                        Upvote ({loaderData.product.upvotes})
                     </Button>
                 </div>
             </div>

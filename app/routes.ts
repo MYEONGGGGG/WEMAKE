@@ -89,6 +89,9 @@ export default [
                     index("features/products/pages/product-reviews-page.tsx"),
                 ]),
             ]),
+
+            // "/products/:productId/visit"
+            route("/visit", "features/products/pages/product-visit-page.tsx"),
         ]),
     ]),
 
