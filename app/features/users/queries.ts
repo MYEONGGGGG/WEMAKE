@@ -46,3 +46,19 @@ export const getUserPosts = async (username: string) => {
     if (error) { throw error; }
     return data;
 }
+
+export const getUserIdByUsername = async (username: string) => {
+    const { data, error } = await client
+        .from('profiles')
+        .select('profile_id')
+        .eq('username', username)
+        .single();
+
+    // 존재하지 않는 유저는 기록하지 않음
+    if (!data) {
+        return null;
+    }
+
+    if (error) { throw error; }
+    return data;
+};
