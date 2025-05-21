@@ -1,4 +1,15 @@
-import { bigint, check, integer, jsonb, pgTable, primaryKey, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import {
+    bigint,
+    check,
+    foreignKey,
+    integer,
+    jsonb,
+    pgTable,
+    primaryKey,
+    text,
+    timestamp,
+    uuid
+} from "drizzle-orm/pg-core";
 import { profiles } from "~/features/users/schema";
 import { sql } from "drizzle-orm";
 
@@ -22,7 +33,15 @@ export const products = pgTable("products", {
     ),
     created_at: timestamp().notNull().defaultNow(),
     updated_at: timestamp().notNull().defaultNow(),
-});
+},
+    (table) => [
+        foreignKey({
+            columns: [table.profile_id],
+            foreignColumns: [profiles.profile_id],
+            name: "products_to_profiles",
+        }).onDelete("cascade"),
+    ]
+);
 
 export const categories = pgTable("categories", {
     category_id: bigint({ mode: "number" })

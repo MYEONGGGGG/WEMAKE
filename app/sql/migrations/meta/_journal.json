@@ -15,6 +15,13 @@
       "when": 1747207634776,
       "tag": "0001_bent_black_crow",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1747788494293,
+      "tag": "0002_spicy_greymalkin",
+      "breakpoints": true
     }
   ]
 }
