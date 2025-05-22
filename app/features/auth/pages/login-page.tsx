@@ -1,4 +1,4 @@
-import type { Route } from "./+types/join-page";
+import type { Route } from "./+types/login-page";
 import { Form, Link, redirect, useNavigation } from "react-router";
 import InputPair from "~/common/components/input-pair";
 import { Button } from "~/common/components";
@@ -30,8 +30,8 @@ export const action = async ({ request }: Route.ActionArgs) => {
     const { success, data, error } = formSchema.safeParse(Object.fromEntries(formData));
     if (!success) {
         return {
-            loginError: null,
             formErrors: error?.flatten().fieldErrors,
+            loginError: null,
         };
     }
 
@@ -53,7 +53,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
 
 export default function LoginPage({ actionData }: Route.ComponentProps) {
     const navigation = useNavigation();
-    const isSubmitting = navigation.state === "loading";
+    const isSubmitting = navigation.state === "submitting" || navigation.state === "loading";
 
     return (
         <div className="flex flex-col items-center justify-center h-full">

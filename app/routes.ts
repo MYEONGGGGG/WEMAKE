@@ -132,6 +132,7 @@ export default [
                 )
             ]),
         ]),
+        route("/logout", "features/auth/pages/logout-page.tsx"),
     ]),
 
     // "/community" 그룹 라우팅
