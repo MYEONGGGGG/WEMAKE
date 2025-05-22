@@ -1,8 +1,9 @@
 import type { Route } from "./+types/join-page";
-import { Form, Link } from "react-router";
+import { Form, Link, useNavigation } from "react-router";
 import InputPair from "~/common/components/input-pair";
 import { Button } from "~/common/components";
 import AuthButtons from "~/features/auth/components/auth-buttons";
+import { LoaderCircle } from "lucide-react";
 
 export const meta: Route.MetaFunction = () => {
     return [
@@ -10,7 +11,21 @@ export const meta: Route.MetaFunction = () => {
     ];
 };
 
-export default function LoginPage() {
+export const action = async ({ request }: Route.ActionArgs) => {
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+    const formData = await request.formData();
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    return {
+        message: "Error wrong password",
+    };
+};
+
+export default function LoginPage({ actionData }: Route.ComponentProps) {
+    const navigation = useNavigation();
+    const isSubmitting = navigation.state === "loading";
+
     return (
         <div className="flex flex-col items-center justify-center h-full">
             <Button variant="ghost" asChild className="absolute right-4 top-8">
@@ -21,7 +36,7 @@ export default function LoginPage() {
                 <h1 className="text-2xl font-semibold">
                     Log in to your account
                 </h1>
-                <Form className="w-full space-y-4">
+                <Form className="w-full space-y-4" method="post">
                     <InputPair
                         id="email"
                         label="Email"
@@ -40,9 +55,12 @@ export default function LoginPage() {
                         placeholder="Enter your password"
                         required
                     />
-                    <Button className="w-full" type="submit">
-                        Login account
+                    <Button className="w-full cursor-pointer" type="submit" disabled={isSubmitting}>
+                        { isSubmitting ? <LoaderCircle className="animate-spin" /> : "Log in" }
                     </Button>
+                    {actionData?.message && (
+                        <p className="text-sm text-red-500">{actionData.message}</p>
+                    )}
                 </Form>
                 <AuthButtons />
             </div>
