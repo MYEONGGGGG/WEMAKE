@@ -127,7 +127,13 @@ export default function JoinPage({ actionData }: Route.ComponentProps) {
                         Create account
                     </Button>
                     {actionData && "signUpError" in actionData && (
-                        <p className="text-sm text-red-500">{actionData.signUpError}</p>
+                        <Alert variant="destructive">
+                            <AlertCircle className="h-4 w-4" />
+                            <AlertTitle>Error</AlertTitle>
+                            <AlertDescription>
+                                {actionData.signUpError}
+                            </AlertDescription>
+                        </Alert>
                     )}
                 </Form>
                 <AuthButtons />

@@ -1,4 +1,5 @@
 /** @Shadcn-ui */
+export { Alert, AlertTitle, AlertDescription } from "~/common/components/ui/alert";
 export { Avatar, AvatarImage, AvatarFallback } from "~/common/components/ui/avatar";
 
 export { Button, buttonVariants } from "~/common/components/ui/button";

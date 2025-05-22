@@ -15,7 +15,7 @@ export default defineConfig({
         open: true,
         watch: {
             usePolling: true,
-            interval: 300,
+            interval: 100,
         },
         fs: {
             allow: ['.']
@@ -27,7 +27,4 @@ export default defineConfig({
             external: ['.well-known/appspecific/com.chrome.devtools.json']
         }
     },
-    // optimizeDeps: {
-    //     include: ["@supabase/supabase-js"]
-    // }
 });

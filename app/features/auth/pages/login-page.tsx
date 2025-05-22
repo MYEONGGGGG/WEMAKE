@@ -1,9 +1,9 @@
 import type { Route } from "./+types/login-page";
 import { Form, Link, redirect, useNavigation } from "react-router";
 import InputPair from "~/common/components/input-pair";
-import { Button } from "~/common/components";
+import { Alert, AlertDescription, AlertTitle, Button } from "~/common/components";
 import AuthButtons from "~/features/auth/components/auth-buttons";
-import { LoaderCircle } from "lucide-react";
+import { AlertCircle, LoaderCircle } from "lucide-react";
 import { z } from "zod";
 import { makeSSRClient } from "~/supa-client";
 
@@ -48,7 +48,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
         };
     }
 
-    return redirect("/", { headers }); // header를 전달하는 이유? 사용자가 올바르게 로그인되었다면 쿠키를 설정해야하기때문!
+    return redirect("/", { headers });
 };
 
 export default function LoginPage({ actionData }: Route.ComponentProps) {
@@ -98,9 +98,14 @@ export default function LoginPage({ actionData }: Route.ComponentProps) {
                         { isSubmitting ? <LoaderCircle className="animate-spin" /> : "Log in" }
                     </Button>
                     {actionData && "loginError" in actionData && (
-                        <p className="text-sm text-red-500">{actionData.loginError}</p>
+                        <Alert variant="destructive">
+                            <AlertCircle className="h-4 w-4" />
+                            <AlertTitle>Error</AlertTitle>
+                            <AlertDescription>
+                                {actionData.loginError}
+                            </AlertDescription>
+                        </Alert>
                     )}
-                {/*  하단부에서 alert 컴포넌트를 이용해서 오류 메세지를 보여주는걸로 바꿔보기  */}
                 </Form>
                 <AuthButtons />
             </div>
