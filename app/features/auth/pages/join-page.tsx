@@ -1,11 +1,12 @@
 import type { Route } from "./+types/join-page";
 import { Form, Link, redirect, useNavigation } from "react-router";
 import InputPair from "~/common/components/input-pair";
-import { Button } from "~/common/components";
+import { Alert, AlertDescription, AlertTitle, Button } from "~/common/components";
 import AuthButtons from "~/features/auth/components/auth-buttons";
 import { makeSSRClient } from "~/supa-client";
 import { z } from "zod";
 import { checkUsernameExists } from "~/features/auth/queries";
+import { AlertCircle } from "lucide-react";
 
 export const meta: Route.MetaFunction = () => {
     return [

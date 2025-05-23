@@ -140,10 +140,16 @@ export default function Navigation({
     isLoggedIn,
     hasNotifications,
     hasMessages,
+    username,
+    avatar,
+    name,
 } : {
     isLoggedIn: boolean;
     hasNotifications: boolean;
     hasMessages: boolean;
+    username?: string;
+    avatar?: string | null;
+    name?: string;
 }) {
     const isMobile = useIsMobile();
 
@@ -252,14 +258,21 @@ export default function Navigation({
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild className="curpoint-pointer">
                         <Avatar>
-                            <AvatarImage src="https://github.com/serranoarevalo.png" alt="Avatar" />
-                            <AvatarFallback>N</AvatarFallback>
+                            {avatar ? (
+                                <AvatarImage src={avatar} alt="Avatar" />
+                            ) : (
+                                <AvatarFallback>{name?.charAt(0)}</AvatarFallback>
+                            )}
                         </Avatar>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
                         <DropdownMenuLabel className="flex flex-col">
-                            <span className="font-medium">John Doe</span>
-                            <span className="text-xs text-muted-foreground">@username</span>
+                            <span className="font-medium">
+                                {name}
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                                @{username}
+                            </span>
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
