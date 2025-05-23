@@ -21,7 +21,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
     const formData = await request.formData();
     const { success, data, error } = formSchema.safeParse(Object.fromEntries(formData));
     if (!success) {
-        return { fieldErrors: error?.flatten().fieldErrors };
+        return { fieldErrors: error.flatten().fieldErrors };
     }
 
     const { email, otp } = data;

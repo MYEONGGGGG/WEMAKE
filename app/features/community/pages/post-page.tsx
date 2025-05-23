@@ -15,10 +15,8 @@ import { getPostById, getReplies } from "~/features/community/queries";
 import { DateTime } from "luxon";
 import { makeSSRClient } from "~/supa-client";
 
-export const meta: Route.MetaFunction = ({ params }) => {
-    return [
-        { title: `${params.postId} | WeMaKe` }
-    ];
+export const meta: Route.MetaFunction = ({ data }) => {
+    return [{ title: `${data.post.title} on ${data.post.topic_name} | wemake` }];
 };
 
 export const loader  = async ({ params, request }: Route.LoaderArgs) => {
@@ -75,7 +73,9 @@ export default function PostPage({ loaderData }: Route.ComponentProps) {
                                     <span>{loaderData.post.author_name}</span>
                                     <DotIcon className="size-5" />
                                     <span>
-                                        {DateTime.fromISO(loaderData.post.created_at).toRelative()}
+                                        {DateTime.fromISO(loaderData.post.created_at, {
+                                            zone: "utc",
+                                        }).toRelative({ unit: "hours" })}
                                     </span>
                                     <DotIcon className="size-5" />
                                     <span>{loaderData.post.replies} replies</span>
@@ -141,7 +141,12 @@ export default function PostPage({ loaderData }: Route.ComponentProps) {
                         </div>
                     </div>
                     <div className="gap-2 text-sm flex flex-col">
-                        <span>🎂 Joined {DateTime.fromISO(loaderData.post.author_created_at).toRelative()} ago</span>
+                        <span>
+                            🎂 Joined{" "}
+                            {DateTime.fromISO(loaderData.post.author_created_at, {
+                                zone: "utc",
+                            }).toRelative({ unit: "hours" })}{" "}
+                        </span>
                         <span>🚀 Launched {loaderData.post.products} products</span>
                     </div>
                     <Button variant="outline" className="w-full">Follow</Button>
