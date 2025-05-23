@@ -176,6 +176,7 @@ export default function Navigation({
                                                     {menu.name}
                                                 </NavigationMenuTrigger>
                                             </Link>
+
                                             <NavigationMenuContent className="w-full md:w-[400px] lg:w-[600px]">
                                                 <ul className="grid px-2 gap-2 md:grid-cols-2">
                                                     {menu.items?.map((item) => (
@@ -256,7 +257,7 @@ export default function Navigation({
                 </Button>
 
                 <DropdownMenu>
-                    <DropdownMenuTrigger asChild className="curpoint-pointer">
+                    <DropdownMenuTrigger asChild className="cursor-pointer">
                         <Avatar>
                             {avatar ? (
                                 <AvatarImage src={avatar} alt="Avatar" />
@@ -276,19 +277,19 @@ export default function Navigation({
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            <DropdownMenuItem asChild className="curpoint-pointer">
+                            <DropdownMenuItem asChild className="cursor-pointer">
                                 <Link to="/my/dashboard">
                                     <LucideBarChart3 className="size-4 mr-2" />
                                     Dashboard
                                 </Link>
                             </DropdownMenuItem>
-                            <DropdownMenuItem asChild className="curpoint-pointer">
+                            <DropdownMenuItem asChild className="cursor-pointer">
                                 <Link to="/my/profile">
                                     <UserIcon className="size-4 mr-2" />
                                     Profile
                                 </Link>
                             </DropdownMenuItem>
-                            <DropdownMenuItem asChild className="curpoint-pointer">
+                            <DropdownMenuItem asChild className="cursor-pointer">
                                 <Link to="/my/settings">
                                     <SettingsIcon className="size-4 mr-2" />
                                     Settings
@@ -296,7 +297,7 @@ export default function Navigation({
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem asChild className="curpoint-pointer">
+                        <DropdownMenuItem asChild className="cursor-pointer">
                             <Link to="/auth/logout">
                                 Logout
                             </Link>
@@ -316,7 +317,7 @@ export default function Navigation({
             </div>
           )}
 
-          {/* Mobile : 햄버거 메뉴 활성화 */}
+          {/* Mobile : 햄버거 메뉴 활성화 // MobileMenu는 임시로 넣어둔것이며, 추후에 발생하는 오류에 대해 수정할 필요가 있음!! */}
           {isMobile && <MobileMenu />}
         </nav>
     );

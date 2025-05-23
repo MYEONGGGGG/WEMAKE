@@ -26,24 +26,6 @@ export const getUserProfile = async (
     return data;
 };
 
-export const getUserProducts = async (
-    client: SupabaseClient<Database>,
-    { username }: { username: string}
-) => {
-    const {data, error} = await client
-        .from('products')
-        .select(`
-            ${productListSelect},
-            profiles!products_to_profiles!inner (
-              profile_id
-            )
-        `)
-        .eq('profiles.username', username);
-
-    if (error) { throw error; }
-    return data;
-}
-
 export const getUserById = async (
     client: SupabaseClient<Database>,
     { id }: { id: string }
@@ -58,6 +40,24 @@ export const getUserById = async (
         `)
         .eq('profile_id', id)
         .single();
+
+    if (error) { throw error; }
+    return data;
+};
+
+export const getUserProducts = async (
+    client: SupabaseClient<Database>,
+    { username }: { username: string}
+) => {
+    const {data, error} = await client
+        .from('products')
+        .select(`
+            ${productListSelect},
+            profiles!products_to_profiles!inner (
+              profile_id
+            )
+        `)
+        .eq('profiles.username', username);
 
     if (error) { throw error; }
     return data;

@@ -167,7 +167,11 @@ export default function LeaderboardPage({ loaderData }: Route.ComponentProps) {
                         votesCount={product.upvotes}
                     />
                 ))}
-                <Button variant="link" asChild className="text-lg p-0 self-center">
+                <Button
+                    variant="link"
+                    className="text-lg p-0 self-center"
+                    asChild
+                >
                     <Link to="/products/leaderboards/yearly">
                         Explore all products &rarr;
                     </Link>

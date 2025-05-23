@@ -51,7 +51,11 @@ export default function MessagePage() {
                 <CardHeader>
                     <Form className="relative flex justify-end items-center">
                         <Textarea placeholder="Write a message..." rows={2} className="resize-none" />
-                        <Button type="submit" size="icon" className="absolute right-2">
+                        <Button
+                            type="submit"
+                            size="icon"
+                            className="absolute right-2"
+                        >
                             <SendIcon className="size-4" />
                         </Button>
                     </Form>

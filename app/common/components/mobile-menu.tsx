@@ -1,5 +1,5 @@
 import { Sheet, SheetContent, SheetTrigger } from "~/common/components/ui/sheet";
-import { Button } from "~/common/components/ui/button";
+import { Button } from "~/common/components";
 import { MenuIcon } from "lucide-react";
 import { Link } from "react-router";
 
