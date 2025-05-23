@@ -5,11 +5,8 @@ import { getJobById } from "~/features/jobs/queries";
 import { DateTime } from "luxon";
 import { makeSSRClient } from "~/supa-client";
 
-export const meta: Route.MetaFunction = () => {
-    return [
-        { title: "Job | WeMaKe" },
-        { name: "description", content: "View job details and information"}
-    ];
+export const meta: Route.MetaFunction = ({ data }) => {
+    return [{ title: `${data.job.position} | WeMaKe` }];
 };
 
 export const loader = async ({ params, request }: Route.LoaderArgs) => {
@@ -36,7 +33,9 @@ export default function JobPage({ loaderData }: Route.ComponentProps) {
                                 className="object-cover"
                             />
                         </div>
-                        <h1 className="text-4xl font-bold">{loaderData.job.position}</h1>
+                        <h1 className="text-4xl font-bold mt-5">
+                            {loaderData.job.position}
+                        </h1>
                         <h4 className="text-lg text-muted-foreground">{loaderData.job.company_name}</h4>
                     </div>
                     {/**/}
