@@ -3,7 +3,8 @@ import { Form, Link, useActionData, useOutletContext } from "react-router";
 import { DotIcon, MessageCircleIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
-import { action } from "../pages/post-page";
+import type { action } from "~/features/community/pages/post-page";
+
 
 interface ReplyProps {
     name: string;
@@ -103,6 +104,7 @@ export function Reply({
                             defaultValue={`@${username} `}
                             rows={5}
                         />
+                        <Button>Reply</Button>
                     </div>
                 </Form>
             )}
@@ -111,6 +113,7 @@ export function Reply({
                 <div className="pl-20 w-full">
                     {replies.map((reply) => (
                         <Reply
+                            key={reply.post_reply_id}
                             name={reply.user.name}
                             username={reply.user.username}
                             avatarUrl={reply.user.avatar}
