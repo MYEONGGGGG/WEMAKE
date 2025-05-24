@@ -27,4 +27,7 @@ export default defineConfig({
             external: ['.well-known/appspecific/com.chrome.devtools.json']
         }
     },
+    optimizeDeps: {
+        include: ['@supabase/supabase-js']
+    },
 });

@@ -1,6 +1,6 @@
 /** Database Update, Delete */
 
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { type SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "~/supa-client";
 
 export const createPost = async (
@@ -39,4 +39,16 @@ export const createPost = async (
         throw error;
     }
     return data;
+};
+
+export const createReply = async (
+    client: SupabaseClient<Database>,
+    { postId, reply, userId }: { postId: string; reply: string; userId: string }
+) => {
+    const { error } = await client
+        .from("post_replies")
+        .insert({ post_id: Number(postId), reply, profile_id: userId });
+    if (error) {
+        throw error;
+    }
 };

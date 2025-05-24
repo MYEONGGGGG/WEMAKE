@@ -8,15 +8,46 @@ import {
     BreadcrumbSeparator,
     Button, Textarea, Badge
 } from "~/common/components";
-import { Form, Link } from "react-router";
+import { Form, Link, useOutletContext } from "react-router";
 import { ChevronUpIcon, DotIcon } from "lucide-react";
 import { Reply } from "~/features/community/components/reply";
 import { getPostById, getReplies } from "~/features/community/queries";
 import { DateTime } from "luxon";
 import { makeSSRClient } from "~/supa-client";
+import { getLoggedInUserId } from "~/features/users/queries";
+import { createReply } from "~/features/community/mutations";
+import { z } from "zod";
+import { useEffect, useRef } from "react";
 
 export const meta: Route.MetaFunction = ({ data }) => {
-    return [{ title: `${data.post.title} on ${data.post.topic_name} | wemake` }];
+    return [{ title: `${data.post.title} on ${data.post.topic_name} | WeMaKe` }];
+};
+
+const formSchema = z.object({
+    reply: z.string().min(1),
+});
+
+export const action = async ({ request, params }: Route.ActionArgs) => {
+    const { client } = makeSSRClient(request);
+    const userId = await getLoggedInUserId(client);
+    const formData = await request.formData();
+    const { success, error, data } = formSchema.safeParse(
+        Object.fromEntries(formData)
+    );
+    if (!success) {
+        return {
+            formErrors: error.flatten().fieldErrors,
+        };
+    }
+    const { reply } = data;
+    await createReply(client, {
+        postId: params.postId,
+        reply,
+        userId,
+    });
+    return {
+        ok: true,
+    };
 };
 
 export const loader  = async ({ params, request }: Route.LoaderArgs) => {
@@ -29,7 +60,23 @@ export const loader  = async ({ params, request }: Route.LoaderArgs) => {
     return { post, replies };
 }
 
-export default function PostPage({ loaderData }: Route.ComponentProps) {
+export default function PostPage({
+    loaderData,
+    actionData,
+}: Route.ComponentProps) {
+    const { isLoggedIn, name, username, avatar } = useOutletContext<{
+        isLoggedIn: boolean;
+        name?: string;
+        username?: string;
+        avatar?: string;
+    }>();
+    const formRef = useRef<HTMLFormElement>(null);
+    useEffect(() => {
+        if (actionData?.ok) {
+            formRef.current?.reset();
+        }
+    }, [actionData?.ok]);
+
     return (
         <div className="space-y-10">
             {/* top */}
@@ -75,7 +122,7 @@ export default function PostPage({ loaderData }: Route.ComponentProps) {
                                     <span>
                                         {DateTime.fromISO(loaderData.post.created_at, {
                                             zone: "utc",
-                                        }).toRelative({ unit: "hours" })}
+                                        }).toRelative()}
                                     </span>
                                     <DotIcon className="size-5" />
                                     <span>{loaderData.post.replies} replies</span>
@@ -84,24 +131,27 @@ export default function PostPage({ loaderData }: Route.ComponentProps) {
                                     {loaderData.post.content}
                                 </p>
                             </div>
-                            <Form className="flex items-start gap-5 w-3/4">
-                                <Avatar className="size-14">
-                                    <AvatarFallback>
-                                        {loaderData.post.author_name[0]}
-                                    </AvatarFallback>
-                                    {loaderData.post.author_avatar ? (
-                                        <AvatarImage src={loaderData.post.author_avatar} />
-                                    ) : null}
-                                </Avatar>
-                                <div className="flex flex-col gap-5 items-end w-full">
-                                    <Textarea
-                                        placeholder="Write a reply"
-                                        className="w-full resize-none"
-                                        rows={10}
-                                    />
-                                    <Button>Reply</Button>
-                                </div>
-                            </Form>
+                            {isLoggedIn ? (
+                                <Form
+                                    ref={formRef}
+                                    className="flex items-start gap-5 w-3/4"
+                                    method="post"
+                                >
+                                    <Avatar className="size-14">
+                                        <AvatarFallback>{name?.[0]}</AvatarFallback>
+                                        <AvatarImage src={avatar} />
+                                    </Avatar>
+                                    <div className="flex flex-col gap-5 items-end w-full">
+                                        <Textarea
+                                            name="reply"
+                                            placeholder="Write a reply"
+                                            className="w-full resize-none"
+                                            rows={5}
+                                        />
+                                        <Button>Reply</Button>
+                                    </div>
+                                </Form>
+                            ) : null}
                             <div className="space-y-10">
                                 <h4 className="font-semibold">
                                     {loaderData.post.replies} Replies
@@ -145,7 +195,7 @@ export default function PostPage({ loaderData }: Route.ComponentProps) {
                             🎂 Joined{" "}
                             {DateTime.fromISO(loaderData.post.author_created_at, {
                                 zone: "utc",
-                            }).toRelative({ unit: "hours" })}{" "}
+                            }).toRelative()}{" "}
                         </span>
                         <span>🚀 Launched {loaderData.post.products} products</span>
                     </div>

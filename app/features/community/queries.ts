@@ -92,7 +92,8 @@ export const getReplies = async (
         ${replyQuery},
         post_replies ( ${replyQuery} )
         `)
-        .eq("post_id", Number(postId));
+        .eq("post_id", Number(postId))
+        .order("created_at", { ascending: false });
     if (error) throw error;
     return data;
 };
