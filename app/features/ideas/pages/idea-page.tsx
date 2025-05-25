@@ -5,6 +5,9 @@ import { Button } from "~/common/components";
 import { getGptIdea } from "~/features/ideas/queries";
 import { DateTime } from "luxon";
 import { makeSSRClient } from "~/supa-client";
+import { Form, redirect } from "react-router";
+import { getLoggedInUserId } from "~/features/users/queries";
+import { claimIdea } from "~/features/ideas/mutations";
 
 export const meta = ({
     data: {
@@ -18,14 +21,29 @@ export const meta = ({
 }
 
 export const loader = async ({ request, params }: Route.LoaderArgs) => {
-    const { client, headers } = makeSSRClient(request);
+    const { client } = makeSSRClient(request);
     const idea = await getGptIdea(client, { ideaId: Number(params.ideaId) });
+    if (idea.is_claimed) {
+        throw redirect(`/ideas`);
+    }
+
     return { idea };
 }
 
+export const action = async ({ request, params }: Route.ActionArgs) => {
+    const { client } = makeSSRClient(request);
+    const userId = await getLoggedInUserId(client);
+    const idea = await getGptIdea(client, { ideaId: Number(params.ideaId) });
+    if (idea.is_claimed) {
+        return { ok: false };
+    }
+    await claimIdea(client, { ideaId: params.ideaId, userId });
+    return redirect(`/my/dashboard/ideas`);
+};
+
 export default function IdeaPage({ loaderData }: Route.ComponentProps) {
     return (
-        <div className="space-y-20">
+        <div>
             <Hero title={`Idea #${ loaderData.idea.gpt_idea_id }`} />
             <div className="max-w-screen-sm mx-auto flex flex-col items-center gap-10">
                 <p className="italic text-center">
@@ -45,7 +63,11 @@ export default function IdeaPage({ loaderData }: Route.ComponentProps) {
                         <span>{ loaderData.idea.likes }</span>
                     </Button>
                 </div>
-                <Button size="lg">Claim idea now &rarr;</Button>
+                {loaderData.idea.is_claimed ? null : (
+                    <Form method="post">
+                        <Button size="lg">Claim idea</Button>
+                    </Form>
+                )}
             </div>
         </div>
     );
