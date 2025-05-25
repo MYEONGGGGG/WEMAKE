@@ -8,13 +8,15 @@ import {
     Label
 } from "~/common/components";
 import InputPair from "~/common/components/input-pair";
-import { Form } from "react-router";
+import { Form, useActionData } from "react-router";
 import { StarIcon } from "lucide-react";
 import { useState } from "react";
+import type { action } from "~/features/products/pages/product-reviews-page";
 
 export function CreateReviewDialog() {
     const [rating, setRating] = useState<number>(0);
     const [hoveredStar, setHoveredStar] = useState<number>(0);
+    const actionData = useActionData<typeof action>();
 
     return (
         <DialogContent>
@@ -27,7 +29,7 @@ export function CreateReviewDialog() {
                 </DialogDescription>
             </DialogHeader>
 
-            <Form className="space-y-10">
+            <Form className="space-y-10" method="post">
                 <div>
                     <Label className="flex flex-col gap-1">
                         Rating
@@ -62,18 +64,28 @@ export function CreateReviewDialog() {
                             </label>
                         ))}
                     </div>
+                    {actionData?.formErrors?.rating && (
+                        <p className="text-red-500">
+                            {actionData.formErrors.rating.join(", ")}
+                        </p>
+                    )}
                 </div>
 
                 <InputPair
                     label="Review"
+                    name="review"
                     placeholder="Tell us more about your experience with this product"
                     description="Maximun 1000 characters"
                     textArea
                     required
                 />
-
+                {actionData?.formErrors?.review && (
+                    <p className="text-red-500">
+                        {actionData.formErrors.review.join(", ")}
+                    </p>
+                )}
                 <DialogFooter>
-                    <Button type="submit">Submit review</Button>
+                    <Button>Submit review</Button>
                 </DialogFooter>
             </Form>
         </DialogContent>
