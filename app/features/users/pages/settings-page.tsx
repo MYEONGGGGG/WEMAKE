@@ -7,7 +7,7 @@ import { Alert, AlertDescription, AlertTitle, Button, Input, Label } from "~/com
 import { makeSSRClient } from "~/supa-client";
 import { getLoggedInUserId, getUserById } from "~/features/users/queries";
 import { z } from "zod";
-import { updateUser } from "~/features/users/mutations";
+import { updateUser, updateUserAvatar } from "~/features/users/mutations";
 
 export const meta: Route.MetaFunction = () => {
     return [
@@ -33,28 +33,58 @@ export const action = async ({ request }: Route.ActionArgs) => {
     const { client } = makeSSRClient(request);
     const userId = await getLoggedInUserId(client);
     const formData = await request.formData();
-    const { success, error, data } = formSchema.safeParse(
-        Object.fromEntries(formData)
-    );
-    if (!success) {
-        return { formErrors: error.flatten().fieldErrors };
+    const avatar = formData.get("avatar");
+
+    if (avatar && avatar instanceof File) {
+        if (avatar.size <= 2097152 && avatar.type.startsWith("image/")) {
+            const { data, error } = await client.storage
+                .from("avatars")
+                .upload(userId, avatar, {
+                    contentType: avatar.type,
+                    upsert: true,
+                });
+
+            if (error) {
+                console.log(error);
+                return { formErrors: { avatar: ["Failed to upload avatar"] } };
+            }
+
+            const {
+                data: { publicUrl },
+            } = await client.storage.from("avatars").getPublicUrl(data.path);
+            await updateUserAvatar(client, {
+                id: userId,
+                avatarUrl: publicUrl,
+            });
+        }
+        else {
+            return { formErrors: { avatar: ["Invalid file size or type"] } };
+        }
     }
-    const { name, role, headline, bio } = data;
-    await updateUser(client, {
-        id: userId,
-        name,
-        role: role as
-            | "developer"
-            | "designer"
-            | "marketer"
-            | "founder"
-            | "product-manager",
-        headline,
-        bio,
-    });
-    return {
-        ok: true,
-    };
+    else {
+        const { success, error, data } = formSchema.safeParse(
+            Object.fromEntries(formData)
+        );
+        if (!success) {
+            return { formErrors: error.flatten().fieldErrors };
+        }
+
+        const { name, role, headline, bio } = data;
+        await updateUser(client, {
+            id: userId,
+            name,
+            role: role as
+                | "developer"
+                | "designer"
+                | "marketer"
+                | "founder"
+                | "product-manager",
+            headline,
+            bio,
+        });
+
+        return { ok: true };
+    }
 };
 
 export default function SettingsPage({
@@ -63,13 +93,13 @@ export default function SettingsPage({
 }: Route.ComponentProps) {
     const [avatar, setAvatar] = useState<string | null>(null);
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (event.target.files) {
-          const file = event.target.files[0];
-          setAvatar(URL.createObjectURL(file));
-      }
+        if (event.target.files) {
+            const file = event.target.files[0];
+            setAvatar(URL.createObjectURL(file));
+        }
     };
 
-    return(
+    return (
         <div className="space-y-20">
             <div className="grid grid-cols-6 gap-40">
                 {/* left */}
@@ -94,11 +124,11 @@ export default function SettingsPage({
                             name="name"
                             placeholder="John Doe"
                         />
-                        {actionData?.formErrors?.name ? (
+                        {actionData?.formErrors && "name" in actionData?.formErrors ? (
                             <Alert>
                                 <AlertTitle>Error</AlertTitle>
                                 <AlertDescription>
-                                    {actionData.formErrors.name.join(", ")}
+                                    {actionData.formErrors?.name?.join(", ")}
                                 </AlertDescription>
                             </Alert>
                         ) : null}
@@ -115,11 +145,11 @@ export default function SettingsPage({
                                 { label: "Other", value: "other" },
                             ]}
                         />
-                        {actionData?.formErrors?.role ? (
+                        {actionData?.formErrors && "role" in actionData?.formErrors ? (
                             <Alert>
                                 <AlertTitle>Error</AlertTitle>
                                 <AlertDescription>
-                                    {actionData.formErrors.role.join(", ")}
+                                    {actionData.formErrors?.role?.join(", ")}
                                 </AlertDescription>
                             </Alert>
                         ) : null}
@@ -132,11 +162,11 @@ export default function SettingsPage({
                             placeholder="John Doe"
                             textArea
                         />
-                        {actionData?.formErrors?.headline ? (
+                        {actionData?.formErrors && "headline" in actionData?.formErrors ? (
                             <Alert>
                                 <AlertTitle>Error</AlertTitle>
                                 <AlertDescription>
-                                    {actionData.formErrors.headline.join(", ")}
+                                    {actionData.formErrors?.headline?.join(", ")}
                                 </AlertDescription>
                             </Alert>
                         ) : null}
@@ -149,11 +179,11 @@ export default function SettingsPage({
                             placeholder="John Doe"
                             textArea
                         />
-                        {actionData?.formErrors?.bio ? (
+                        {actionData?.formErrors && "bio" in actionData?.formErrors ? (
                             <Alert>
                                 <AlertTitle>Error</AlertTitle>
                                 <AlertDescription>
-                                    {actionData.formErrors.bio.join(", ")}
+                                    {actionData.formErrors?.bio?.join(", ")}
                                 </AlertDescription>
                             </Alert>
                         ) : null}
