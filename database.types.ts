@@ -881,6 +881,13 @@ export type Database = {
       }
     }
     Functions: {
+      get_dashboard_stats: {
+        Args: { user_id: string }
+        Returns: {
+          views: number
+          month: string
+        }[]
+      }
       is_user_member: {
         Args: { room_id: number; user_id: string }
         Returns: boolean
