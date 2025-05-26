@@ -1,10 +1,15 @@
 import type { Route } from "./+types/submit-product-page";
 import { Hero } from "~/common/components/hero";
-import { Form } from "react-router";
+import { Form, redirect  } from "react-router";
 import InputPair from "~/common/components/input-pair";
 import SelectPair from "~/common/components/select-pair";
 import { Button, Input, Label } from "~/common/components";
 import { useState } from "react";
+import { z } from "zod";
+import { makeSSRClient } from "~/supa-client";
+import { getLoggedInUserId } from "~/features/users/queries";
+import { createProduct } from "~/features/products/mutations";
+import { getCategories } from "~/features/products/queries";
 
 export const meta : Route.MetaFunction = () => {
     return [
@@ -13,7 +18,62 @@ export const meta : Route.MetaFunction = () => {
     ];
 }
 
-export default function SubmitProductPage({ loaderData }: Route.ComponentProps) {
+const formSchema = z.object({
+    name: z.string().min(1),
+    tagline: z.string().min(1),
+    url: z.string().min(1),
+    description: z.string().min(1),
+    howItWorks: z.string().min(1),
+    category: z.coerce.number(),
+    icon: z.instanceof(File).refine((file) => {
+        return file.size <= 2097152 && file.type.startsWith("image/");
+    }),
+});
+
+export const action = async ({request}: Route.ActionArgs) => {
+    const { client } = makeSSRClient(request);
+    const userId = await getLoggedInUserId(client);
+    const formData = await request.formData();
+    const { data, success, error } = formSchema.safeParse(
+        Object.fromEntries(formData)
+    );
+    if (!success) {
+        return { formErrors: error.flatten().fieldErrors };
+    }
+    const { icon, ...rest } = data;
+    const { data: uploadData, error: uploadError } = await client.storage
+        .from("icons")
+        .upload(`${userId}/${Date.now()}`, icon, {
+            contentType: icon.type,
+            upsert: false,
+        });
+    if (uploadError) {
+        return { formErrors: { icon: ["Failed to upload icon"] } };
+    }
+    const {
+        data: { publicUrl },
+    } = await client.storage.from("icons").getPublicUrl(uploadData.path);
+    const productId = await createProduct(client, {
+        name: rest.name,
+        tagline: rest.tagline,
+        description: rest.description,
+        howItWorks: rest.howItWorks,
+        url: rest.url,
+        iconUrl: publicUrl,
+        categoryId: rest.category,
+        userId,
+    });
+    return redirect(`/products/${productId}`);
+};
+
+export const loader = async ({ request }: Route.LoaderArgs) => {
+    const { client } = makeSSRClient(request);
+    const userId = await getLoggedInUserId(client);
+    const categories = await getCategories(client);
+    return { categories };
+};
+
+export default function SubmitPage({ loaderData, actionData }: Route.ComponentProps) {
     const [icon, setIcon] = useState<string | null>(null);
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
@@ -29,7 +89,11 @@ export default function SubmitProductPage({ loaderData }: Route.ComponentProps) 
                 title="Submit Product"
                 subtitle="Share your product with the world"
             />
-            <Form className="grid md:grid-cols-2 gap-10 max-w-screen-lg mx-auto">
+            <Form
+                method="post"
+                encType="multipart/form-data"
+                className="grid grid-cols-2 gap-10 max-w-screen-lg mx-auto"
+            >
                 {/* Left */}
                 <div className="space-y-5 order-1 md:order-0">
                     <InputPair
@@ -41,6 +105,11 @@ export default function SubmitProductPage({ loaderData }: Route.ComponentProps) 
                         required
                         placeholder="Name of your product"
                     />
+                    {actionData &&
+                        "formErrors" in actionData &&
+                        actionData?.formErrors?.name && (
+                            <p className="text-red-500">{actionData.formErrors.name}</p>
+                        )}
                     <InputPair
                         label="Tagline"
                         description="60 characters or less"
@@ -50,6 +119,11 @@ export default function SubmitProductPage({ loaderData }: Route.ComponentProps) 
                         required
                         placeholder="A concise description of your product"
                     />
+                    {actionData &&
+                        "formErrors" in actionData &&
+                        actionData?.formErrors?.tagline && (
+                            <p className="text-red-500">{actionData.formErrors.tagline}</p>
+                        )}
                     <InputPair
                         label="URL"
                         description="The URL of your product"
@@ -59,6 +133,11 @@ export default function SubmitProductPage({ loaderData }: Route.ComponentProps) 
                         required
                         placeholder="https://example.com"
                     />
+                    {actionData &&
+                        "formErrors" in actionData &&
+                        actionData?.formErrors?.url && (
+                            <p className="text-red-500">{actionData.formErrors.url}</p>
+                        )}
                     <InputPair
                         textArea
                         label="Description"
@@ -69,18 +148,44 @@ export default function SubmitProductPage({ loaderData }: Route.ComponentProps) 
                         required
                         placeholder="A detailed description of your product"
                     />
+                    {actionData &&
+                        "formErrors" in actionData &&
+                        actionData?.formErrors?.description && (
+                            <p className="text-red-500">
+                                {actionData.formErrors.description}
+                            </p>
+                        )}
+                    <InputPair
+                        textArea
+                        label="How it works"
+                        description="A detailed description of how your product howItWorks"
+                        id="howItWorks"
+                        name="howItWorks"
+                        required
+                        type="text"
+                        placeholder="A detailed description of how your product works"
+                    />
+                    {actionData &&
+                        "formErrors" in actionData &&
+                        actionData?.formErrors?.howItWorks && (
+                            <p className="text-red-500">{actionData.formErrors.howItWorks}</p>
+                        )}
                     <SelectPair
                         label="Category"
                         description="The category of your product"
                         name="category"
                         required
                         placeholder="Select a category"
-                        options={[
-                            { value: "1", label: "Category 1" },
-                            { value: "2", label: "Category 2" },
-                            { value: "3", label: "Category 3" },
-                        ]}
+                        options={loaderData.categories.map((category) => ({
+                            label: category.name,
+                            value: category.category_id.toString(),
+                        }))}
                     />
+                    {actionData &&
+                        "formErrors" in actionData &&
+                        actionData?.formErrors?.category && (
+                            <p className="text-red-500">{actionData.formErrors.category}</p>
+                        )}
                     <Button type="submit" className="w-full" size="lg">Submit</Button>
                 </div>
 
@@ -105,6 +210,11 @@ export default function SubmitProductPage({ loaderData }: Route.ComponentProps) 
                         onChange={onChange}
                         required
                     />
+                    {actionData &&
+                        "formErrors" in actionData &&
+                        actionData?.formErrors?.icon && (
+                            <p className="text-red-500">{actionData.formErrors.icon}</p>
+                        )}
                     <div className="flex flex-col text-xs">
                         <span className="text-muted-foreground">
                             Recommended size: 128x128px

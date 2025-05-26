@@ -32,7 +32,7 @@ export default function ProductOverviewLayout({loaderData}: Route.ComponentProps
             <div className="flex flex-col md:flex-row md:justify-between gap-6 w-full">
                 {/* Left */}
                 <div className="flex gap-3 md:gap-10">
-                    <div className="size-40 rounded-xl shadow-xl bg-primary/50"></div>
+                    <div className="size-40 rounded-xl overflow-hidden shadow-xl bg-primary/50"></div>
                     <div>
                         <h1 className="text-2xl md:text-5xl font-bold">{loaderData.product.name}</h1>
                         <p className="text-base md:text-2xl font-light">{loaderData.product.tagline}</p>
