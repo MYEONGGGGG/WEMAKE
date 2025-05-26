@@ -39,9 +39,9 @@ export const action = async ({ request }: Route.ActionArgs) => {
         if (avatar.size <= 2097152 && avatar.type.startsWith("image/")) {
             const { data, error } = await client.storage
                 .from("avatars")
-                .upload(userId, avatar, {
+                .upload(`${userId}/${Date.now()}`, avatar, {
                     contentType: avatar.type,
-                    upsert: true,
+                    upsert: false,
                 });
 
             if (error) {
@@ -91,7 +91,7 @@ export default function SettingsPage({
     loaderData,
     actionData,
 }: Route.ComponentProps) {
-    const [avatar, setAvatar] = useState<string | null>(null);
+    const [avatar, setAvatar] = useState<string | null>(loaderData.user.avatar);
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
             const file = event.target.files[0];
@@ -192,13 +192,18 @@ export default function SettingsPage({
                 </div>
 
                 {/* right */}
-                <aside className="col-span-2 p-6 rounded-lg border shadow-md">
+                <Form
+                    className="md:col-span-2 p-6 rounded-lg border shadow-md flex flex-col gap-5"
+                    method="post"
+                    encType="multipart/form-data"
+                >
                     <Label className="flex flex-col gap-1">
                         Avatar
                         <small className="text-muted-foreground">
                             This is your public avatar.
                         </small>
                     </Label>
+
                     <div className="space-y-5">
                         <div className="size-40 rounded-full shadow-xl overflow-hidden">
                             {avatar ? (
@@ -225,7 +230,7 @@ export default function SettingsPage({
                         </div>
                         <Button className="w-full">Update avatar</Button>
                     </div>
-                </aside>
+                </Form>
             </div>
         </div>
     );
