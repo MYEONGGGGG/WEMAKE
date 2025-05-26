@@ -888,6 +888,14 @@ export type Database = {
           month: string
         }[]
       }
+      get_product_stats: {
+        Args: { product_id: string }
+        Returns: {
+          product_views: number
+          product_visits: number
+          month: string
+        }[]
+      }
       is_user_member: {
         Args: { room_id: number; user_id: string }
         Returns: boolean

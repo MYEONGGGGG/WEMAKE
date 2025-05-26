@@ -10,6 +10,9 @@ import {
 } from "~/common/components";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import type { ChartConfig } from "~/common/components/ui/chart";
+import { makeSSRClient } from "~/supa-client";
+import { getLoggedInUserId } from "~/features/users/queries";
+import { redirect } from "react-router";
 
 export const meta: Route.MetaFunction = () => {
     return [
@@ -17,14 +20,28 @@ export const meta: Route.MetaFunction = () => {
     ];
 };
 
-const charData = [
-    { month: "January", views: 186, visitors: 123 },
-    { month: "February", views: 305, visitors: 45 },
-    { month: "March", views: 237, visitors: 32 },
-    { month: "April", views: 73, visitors: 11 },
-    { month: "May", views: 209, visitors: 200 },
-    { month: "June", views: 214, visitors: 156 },
-]
+export const loader = async ({ request, params }: Route.LoaderArgs) => {
+    const { client } = await makeSSRClient(request);
+    const userId = await getLoggedInUserId(client);
+    const { error } = await client
+        .from("products")
+        .select("product_id")
+        .eq("profile_id", userId)
+        .eq("product_id", Number(params.productId))
+        .single();
+    if (error) {
+        throw redirect("/my/dashboard/products");
+    }
+    const { data, error: rcpError } = await client.rpc("get_product_stats", {
+        product_id: params.productId,
+    });
+    if (rcpError) {
+        throw error;
+    }
+    return {
+        chartData: data,
+    };
+};
 
 const chartConfig = {
     views: {
@@ -37,7 +54,7 @@ const chartConfig = {
     }
 } satisfies ChartConfig;
 
-export default function DashboardProductPage() {
+export default function DashboardProductPage({ loaderData }: Route.ComponentProps) {
     return(
         <div className="space-y-5">
             <h1 className="text-2xl font-semibold mb-6">Analytics</h1>
@@ -49,7 +66,7 @@ export default function DashboardProductPage() {
                     <ChartContainer config={chartConfig}>
                         <AreaChart
                             accessibilityLayer
-                            data={charData}
+                            data={loaderData.chartData}
                             margin={{
                                 left: 12,
                                 right: 12,
@@ -61,10 +78,10 @@ export default function DashboardProductPage() {
                                 tickLine={false}
                                 axisLine={false}
                                 tickMargin={8}
-                                tickFormatter={(value) => value.slice(0, 3)}
+                                padding={{ left: 15, right: 15 }}
                             />
                             <Area
-                                dataKey="views"
+                                dataKey="product_views"
                                 type="natural"
                                 stroke={chartConfig.views.color}
                                 fill={chartConfig.views.color}
@@ -72,7 +89,7 @@ export default function DashboardProductPage() {
                                 dot={false}
                             />
                             <Area
-                                dataKey="visitors"
+                                dataKey="product_visits"
                                 type="natural"
                                 stroke={chartConfig.visitors.color}
                                 fill={chartConfig.visitors.color}
