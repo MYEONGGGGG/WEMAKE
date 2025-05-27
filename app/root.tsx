@@ -55,12 +55,13 @@ export const loader = async({request}: Route.LoaderArgs) => {
   const {
     data: {user}
   } = await client.auth.getUser();
-  if (user) {
-    const profile = await getUserById(client, { id: user?.id });
-    return { user, profile };
+  if (user && user.id) {
+      const profile = await getUserById(client, { id: user.id });
+      const count = await countNotifications(client, { userId: user.id });
+      return { user, profile, notificationsCount: count };
   }
 
-  return { user: null, profile: null };
+  return { user: null, profile: null, notificationsCount: 0 };
 };
 
 export default function App({loaderData}: Route.ComponentProps) {
@@ -81,7 +82,7 @@ export default function App({loaderData}: Route.ComponentProps) {
                 username={loaderData.profile?.username}
                 avatar={loaderData.profile?.avatar}
                 name={loaderData.profile?.name}
-                hasNotifications={false}
+                hasNotifications={loaderData.notificationsCount > 0}
                 hasMessages={false}
             />
         }

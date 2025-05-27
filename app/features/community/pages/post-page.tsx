@@ -138,7 +138,7 @@ export default function PostPage({
                                     <DotIcon className="size-5" />
                                     <span>
                                         {DateTime.fromISO(loaderData.post.created_at, {
-                                            zone: "utc",
+                                            zone: "Asia/Seoul",
                                         }).toRelative()}
                                     </span>
                                     <DotIcon className="size-5" />
@@ -213,7 +213,7 @@ export default function PostPage({
                         <span>
                             🎂 Joined{" "}
                             {DateTime.fromISO(loaderData.post.author_created_at, {
-                                zone: "utc",
+                                zone: "Asia/Seoul",
                             }).toRelative()}{" "}
                         </span>
                         <span>🚀 Launched {loaderData.post.products} products</span>
