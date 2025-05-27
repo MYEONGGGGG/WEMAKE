@@ -13,7 +13,7 @@ import Navigation from "~/common/components/navigation";
 import { Settings } from "luxon";
 import { cn } from "~/lib/utils";
 import { makeSSRClient } from "~/supa-client";
-import { getUserById } from "~/features/users/queries";
+import { countNotifications, getUserById } from "~/features/users/queries";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
