@@ -1,84 +1,96 @@
-import { Sheet, SheetContent, SheetTrigger } from "~/common/components/ui/sheet";
-import { Button } from "~/common/components";
 import { MenuIcon } from "lucide-react";
 import { Link } from "react-router";
+import {
+    ButtonRef,
+    Sheet,
+    SheetContentRef,
+    SheetTrigger,
+    SheetTitle,
+    SheetDescription,
+    SheetFooter, SheetClose, SheetHeader,
+} from "~/common/components";
+import NavDropdownMenu from "~/common/components/nav-dropdown-menu";
+import { MOBILE_MENUS } from "~/common/components/constants";
 
-const menus = [
-    {
-        name: "Products",
-        to: "/products",
-        items: [
-            { name: "Leaderboards", to: "/products/leaderboards" },
-            { name: "Categories", to: "/products/categories" },
-            { name: "Search", to: "/products/search" },
-            { name: "Submit a Product", to: "/products/submit" },
-            { name: "Promote", to: "/products/promote" },
-        ],
-    },
-    {
-        name: "Jobs",
-        to: "/jobs",
-        items: [
-            { name: "Remote Jobs", to: "/jobs?location=remote" },
-            { name: "Full-Time Jobs", to: "/jobs?location=full-time" },
-            { name: "Freelance Jobs", to: "/jobs?location=freelance" },
-            { name: "Internships", to: "/jobs?location=internship" },
-            { name: "Submit a Job", to: "/jobs/submit" },
-        ],
-    },
-    {
-        name: "Community",
-        to: "/community",
-        items: [
-            { name: "All Posts", to: "/community" },
-            { name: "Top Posts", to: "/community?sort=top" },
-            { name: "New Posts", to: "/community?sort=new" },
-            { name: "Create a Post", to: "/community/create" },
-        ],
-    },
-    {
-        name: "IdeasGPT",
-        to: "/ideas",
-    },
-    {
-        name: "Teams",
-        to: "/teams",
-        items: [
-            { name: "All Teams", to: "/teams" },
-            { name: "Create a Team", to: "/teams/create" },
-        ],
-    },
-];
-
-export function MobileMenu() {
+export function MobileMenu({
+    isMobile,
+    isLoggedIn,
+    username,
+    avatar,
+    name,
+}: {
+    isMobile: boolean;
+    isLoggedIn: boolean;
+    username?: string;
+    avatar?: string | null;
+    name?: string;
+}) {
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <ButtonRef variant="ghost" size="icon">
                     <MenuIcon className="size-5" />
-                </Button>
+                </ButtonRef>
             </SheetTrigger>
 
-            <SheetContent side="right" className="w-64 p-6">
+            <SheetContentRef side="right" className="w-64 p-6">
+                <SheetHeader>
+                    {isLoggedIn && (
+                        <div className="flex items-center gap-3">
+                            <NavDropdownMenu
+                                isMobile={isMobile}
+                                username={username}
+                                avatar={avatar}
+                                name={name}
+                            />
+                        </div>
+                    )}
+
+                    <SheetTitle className="sr-only">모바일 메뉴</SheetTitle>
+                    <SheetDescription className="sr-only">
+                        네비게이션 메뉴를 선택하세요.
+                    </SheetDescription>
+                </SheetHeader>
+
                 <nav className="flex flex-col gap-6 mt-4">
-                    {menus.map((menu) => (
+                    {MOBILE_MENUS.map((menu) => (
                         <div key={menu.name}>
                             <Link to={menu.to} className="text-base font-semibold">
                                 {menu.name}
                             </Link>
-                            {menu.items?.map((item) => (
-                                <Link
-                                    key={item.name}
-                                    to={item.to}
-                                    className="ml-4 block text-sm text-muted-foreground mt-1"
-                                >
-                                    {item.name}
-                                </Link>
-                            ))}
+                            {menu.items && menu.items.length > 0 && (
+                                <div>
+                                    {menu.items.map((item) => (
+                                        <Link
+                                            key={item.name}
+                                            to={item.to}
+                                            className="ml-4 block text-sm text-muted-foreground mt-1"
+                                        >
+                                            {item.name}
+                                        </Link>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     ))}
                 </nav>
-            </SheetContent>
+                <SheetFooter className="mt-6">
+                    {!isLoggedIn && (
+                        <div className="flex flex-col gap-3 w-full">
+                            <SheetClose asChild>
+                                <ButtonRef asChild variant="outline" className="text-xs w-full">
+                                    <Link to="/auth/login">Login</Link>
+                                </ButtonRef>
+                            </SheetClose>
+                            <SheetClose asChild>
+                                <ButtonRef asChild className="text-xs w-full">
+                                    <Link to="/auth/join">Join</Link>
+                                </ButtonRef>
+                            </SheetClose>
+                        </div>
+                    )}
+                </SheetFooter>
+            </SheetContentRef>
         </Sheet>
     );
 }

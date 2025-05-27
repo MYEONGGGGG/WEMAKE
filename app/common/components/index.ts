@@ -2,7 +2,7 @@
 export { Alert, AlertTitle, AlertDescription } from "~/common/components/ui/alert";
 export { Avatar, AvatarImage, AvatarFallback } from "~/common/components/ui/avatar";
 
-export { Button, buttonVariants } from "~/common/components/ui/button";
+export { Button, ButtonRef, buttonVariants, buttonVariantsRef } from "~/common/components/ui/button";
 export { Badge, badgeVariants } from "~/common/components/ui/badge";
 export {
     Breadcrumb,
@@ -98,6 +98,7 @@ export {
     SheetTrigger,
     SheetClose,
     SheetContent,
+    SheetContentRef,
     SheetHeader,
     SheetFooter,
     SheetTitle,
