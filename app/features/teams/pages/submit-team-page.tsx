@@ -80,7 +80,7 @@ export default function SubmitTeamPage({ actionData }: Route.ComponentProps) {
                             { label: "Idea", value: "idea" },
                             { label: "Prototype", value: "prototype" },
                             { label: "MVP", value: "mvp" },
-                            { label: "Production", value: "production" },
+                            { label: "Production", value: "product" },
                         ]}
                         required
                     />
