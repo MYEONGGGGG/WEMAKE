@@ -12,7 +12,13 @@ import { Form, useOutletContext } from "react-router";
 import { SendIcon } from "lucide-react";
 import MessageBubble from "~/features/users/components/message-bubble";
 import { makeSSRClient } from "~/supa-client";
-import { getLoggedInUserId, getMessagesByMessagesRoomId, getRoomsParticipant } from "~/features/users/queries";
+import {
+    getLoggedInUserId,
+    getMessagesByMessagesRoomId,
+    getRoomsParticipant,
+    sendMessageToRoom
+} from "~/features/users/queries";
+import { useEffect, useRef } from "react";
 
 export const meta: Route.MetaFunction = () => {
     return [
@@ -21,7 +27,7 @@ export const meta: Route.MetaFunction = () => {
 };
 
 export const loader = async ({ request, params }: Route.LoaderArgs) => {
-    const { client } = await makeSSRClient(request);
+    const { client } = makeSSRClient(request);
     const userId = await getLoggedInUserId(client);
 
     // 사전 검증 후 전달(undefined 방지)
@@ -42,8 +48,29 @@ export const loader = async ({ request, params }: Route.LoaderArgs) => {
     };
 };
 
-export default function MessagePage({ loaderData }: Route.ComponentProps) {
+export const action = async ({ request, params }: Route.ActionArgs) => {
+    const { client } = makeSSRClient(request);
+    const userId = await getLoggedInUserId(client);
+    const formData = await request.formData();
+    const message = formData.get("message");
+    await sendMessageToRoom(client, {
+        messageRoomId: params.messageRoomId,
+        message: message as string,
+        userId,
+    });
+    return {
+        ok: true,
+    };
+};
+
+export default function MessagePage({ loaderData, actionData }: Route.ComponentProps) {
     const { userId } = useOutletContext<{ userId: string }>();
+    const formRef = useRef<HTMLFormElement>(null);
+    useEffect(() => {
+        if (actionData?.ok) {
+            formRef.current?.reset();
+        }
+    }, [actionData]);
 
     return(
         <div className="h-full flex flex-col justify-between">
@@ -78,8 +105,18 @@ export default function MessagePage({ loaderData }: Route.ComponentProps) {
 
             <Card>
                 <CardHeader>
-                    <Form className="relative flex justify-end items-center">
-                        <Textarea placeholder="Write a message..." rows={2} className="resize-none" />
+                    <Form
+                        ref={formRef}
+                        method="post"
+                        className="relative flex justify-end items-center"
+                    >
+                        <Textarea
+                            placeholder="Write a message..."
+                            rows={2}
+                            className="resize-none"
+                            required
+                            name="message"
+                        />
                         <Button
                             type="submit"
                             size="icon"

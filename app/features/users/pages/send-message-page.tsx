@@ -16,6 +16,11 @@ export const action = async ({ request, params }: Route.ActionArgs) => {
     const formData = await request.formData();
     const { client } = makeSSRClient(request);
     const fromUserId = await getLoggedInUserId(client);
+
+    // 사전 검증 후 전달(undefined 방지)
+    if (!params.username) {
+        throw new Error("username가 필요합니다.");
+    }
     const { profile_id: toUserId } = await getUserProfile(client, {
         username: params.username,
     });
