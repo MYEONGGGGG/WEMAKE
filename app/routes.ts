@@ -173,7 +173,7 @@ export default [
             // "/my/messages" 관련 페이지 그룹
             ...prefix("/messages", [
                 index("features/users/pages/messages-page.tsx"),
-                route("/:messageId", "features/users/pages/message-page.tsx"),
+                route("/:messageRoomId", "features/users/pages/message-page.tsx"),
             ]),
         ]),
     ]),
