@@ -898,6 +898,12 @@ export type Database = {
           month: string
         }[]
       }
+      get_room: {
+        Args: { from_user_id: string; to_user_id: string }
+        Returns: {
+          message_room_id: number
+        }[]
+      }
       is_user_member: {
         Args: { room_id: number; user_id: string }
         Returns: boolean

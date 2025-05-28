@@ -10,7 +10,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     } = await client.auth.getUser();
     if (user) {
         const profile = await getUserById(client, { id: user.id });
-        return redirect(`/users/${profile.username}`);
+        return redirect(`/users/${encodeURIComponent(profile.username)}`);
     }
 
     // 로그인한 계정이 없다면 로그인하도록 유도
