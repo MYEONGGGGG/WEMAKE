@@ -99,6 +99,7 @@ export default [
     ...prefix("/ideas", [
         index("features/ideas/pages/ideas-page.tsx"),
         route("/:ideaId", "features/ideas/pages/idea-page.tsx"),
+        // route("/generate", "features/ideas/pages/generate-idea-page.tsx"), // gpt_ideas 테이블에 데이터가 이미 충분히 많아서 페이지를 생성하지 않음
     ]),
 
     // "/jobs" 그룹 라우팅
