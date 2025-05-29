@@ -12,7 +12,7 @@ import { makeSSRClient } from "~/supa-client";
 import { getLoggedInUserId, getMessages } from "~/features/users/queries";
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
-    const { client } = await makeSSRClient(request);
+    const { client } = makeSSRClient(request);
     const userId = await getLoggedInUserId(client);
     const messages = await getMessages(client, { userId });
     return {
@@ -21,7 +21,11 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 };
 
 export default function MessagesLayout({ loaderData }: Route.ComponentProps) {
-    const { userId } = useOutletContext<{ userId: string }>();
+    const { userId, name, avatar } = useOutletContext<{
+        userId: string;
+        name: string;
+        avatar: string;
+    }>();
 
     return (
         <SidebarProvider className="max-h-[calc(100vh-14rem)] overflow-hidden h-[calc(100vh-14rem)] min-h-full">
@@ -43,7 +47,7 @@ export default function MessagesLayout({ loaderData }: Route.ComponentProps) {
                 </SidebarContent>
             </Sidebar>
             <div className="w-full h-full">
-                <Outlet context={{ userId }} />
+                <Outlet context={{ userId, name, avatar }} />
             </div>
         </SidebarProvider>
     );

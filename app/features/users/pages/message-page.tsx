@@ -11,14 +11,14 @@ import {
 import { Form, useOutletContext } from "react-router";
 import { SendIcon } from "lucide-react";
 import MessageBubble from "~/features/users/components/message-bubble";
-import { makeSSRClient } from "~/supa-client";
+import { browserClient, type Database, makeSSRClient } from "~/supa-client";
 import {
     getLoggedInUserId,
     getMessagesByMessagesRoomId,
     getRoomsParticipant,
     sendMessageToRoom
 } from "~/features/users/queries";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const meta: Route.MetaFunction = () => {
     return [
@@ -38,13 +38,13 @@ export const loader = async ({ request, params }: Route.LoaderArgs) => {
         messageRoomId: params.messageRoomId,
         userId,
     });
-    const participants = await getRoomsParticipant(client, {
+    const participant = await getRoomsParticipant(client, {
         messageRoomId: params.messageRoomId,
         userId,
     });
     return {
         messages,
-        participants,
+        participant,
     };
 };
 
@@ -64,27 +64,54 @@ export const action = async ({ request, params }: Route.ActionArgs) => {
 };
 
 export default function MessagePage({ loaderData, actionData }: Route.ComponentProps) {
-    const { userId } = useOutletContext<{ userId: string }>();
+    const [messages, setMessages] = useState(loaderData.messages);
+    const { userId, name, avatar } = useOutletContext<{
+        userId: string;
+        name: string;
+        avatar: string;
+    }>();
     const formRef = useRef<HTMLFormElement>(null);
     useEffect(() => {
         if (actionData?.ok) {
             formRef.current?.reset();
         }
     }, [actionData]);
+    useEffect(() => {
+        const changes = browserClient
+            .channel(`room:${userId}-${loaderData.participant?.profile?.profile_id}`)
+            .on(
+                "postgres_changes",
+                {
+                    event: "INSERT",
+                    schema: "public",
+                    table: "messages",
+                },
+                (payload) => {
+                    setMessages((prev) => [
+                        ...prev,
+                        payload.new as Database["public"]["Tables"]["messages"]["Row"],
+                    ]);
+                }
+            )
+            .subscribe();
+        return () => {
+            changes.unsubscribe();
+        };
+    }, []);
 
     return(
         <div className="h-full flex flex-col justify-between">
             <Card>
                 <CardHeader className="flex flex-row gap-4">
                     <Avatar className="size-14">
-                        <AvatarImage src={loaderData.participants?.profile?.avatar ?? ""} />
+                        <AvatarImage src={loaderData.participant?.profile?.avatar ?? ""} />
                         <AvatarFallback>
-                            {loaderData.participants?.profile?.name.charAt(0) ?? ""}
+                            {loaderData.participant?.profile?.name.charAt(0) ?? ""}
                         </AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col gap-0">
                         <CardTitle className="text-xl">
-                            {loaderData.participants?.profile?.name ?? ""}
+                            {loaderData.participant?.profile?.name ?? ""}
                         </CardTitle>
                         <CardDescription>2 days ago</CardDescription>
                     </div>
@@ -92,13 +119,21 @@ export default function MessagePage({ loaderData, actionData }: Route.ComponentP
             </Card>
 
             <div className="py-10 overflow-y-scroll space-y-4 flex flex-col justify-start h-full">
-                {loaderData.messages.map((message) => (
+                {messages.map((message) => (
                     <MessageBubble
                         key={message.message_id}
-                        avatarUrl={message.sender?.avatar ?? ""}
-                        avatarFallback={message.sender?.name.charAt(0) ?? ""}
+                        avatarUrl={
+                            message.sender_id === userId
+                                ? avatar
+                                : loaderData.participant?.profile?.avatar ?? ""
+                        }
+                        avatarFallback={
+                            message.sender_id === userId
+                                ? name.charAt(0)
+                                : loaderData.participant?.profile.name.charAt(0) ?? ""
+                        }
                         content={message.content}
-                        isCurrentUser={message.sender?.profile_id === userId}
+                        isCurrentUser={message.sender_id === userId}
                     />
                 ))}
             </div>
@@ -130,3 +165,5 @@ export default function MessagePage({ loaderData, actionData }: Route.ComponentP
         </div>
     );
 }
+
+export const shouldRevalidate = () => false;

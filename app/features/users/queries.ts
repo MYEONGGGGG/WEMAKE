@@ -201,17 +201,10 @@ export const getMessagesByMessagesRoomId = async (
     if (count === 0) {
         throw new Error("Message room not found");
     }
+
     const { data, error } = await client
         .from("messages")
-        .select(
-            `*,
-      sender:profiles!sender_id!inner(
-        name,
-        profile_id,
-        avatar
-      )
-      `
-        )
+        .select(`*`)
         .eq("message_room_id", Number(messageRoomId))
         .order("created_at", { ascending: true });
     if (error) {
@@ -237,14 +230,12 @@ export const getRoomsParticipant = async (
     }
     const { data, error } = await client
         .from("message_room_members")
-        .select(
-            `
-      profile:profiles!profile_id!inner(
+        .select(`
+        profile:profiles!profile_id!inner(
         name,
+        profile_id,
         avatar
-      )
-      `
-        )
+        )`)
         .eq("message_room_id", Number(messageRoomId))
         .neq("profile_id", userId)
         .single();
