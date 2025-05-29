@@ -69,6 +69,7 @@ export default [
         route("/search", "features/products/pages/search-page.tsx"),
         route("/submit", "features/products/pages/submit-product-page.tsx"),
         route("/promote", "features/products/pages/promote-page.tsx"),
+        route("/promote/success", "features/products/pages/promote-success-page.tsx"),
 
         // "/products/:productId" 상세 제품 페이지 (동적 라우팅 구조)
         ...prefix("/:productId", [
