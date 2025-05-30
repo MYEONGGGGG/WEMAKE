@@ -796,6 +796,38 @@ export type Database = {
           },
         ]
       }
+      todos: {
+        Row: {
+          completed: boolean
+          created_at: string
+          profile_id: string
+          title: string
+          todo_id: number
+        }
+        Insert: {
+          completed?: boolean
+          created_at?: string
+          profile_id: string
+          title: string
+          todo_id?: never
+        }
+        Update: {
+          completed?: boolean
+          created_at?: string
+          profile_id?: string
+          title?: string
+          todo_id?: never
+        }
+        Relationships: [
+          {
+            foreignKeyName: "todos_profile_id_profiles_profile_id_fk"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["profile_id"]
+          },
+        ]
+      }
       topics: {
         Row: {
           created_at: string

@@ -12,9 +12,9 @@ import {
     uuid
 } from "drizzle-orm/pg-core";
 import { products } from "../products/schema";
-import { authenticatedRole } from "drizzle-orm/neon";
 import { sql } from "drizzle-orm";
 import { posts } from "~/features/community/schema";
+import { authenticatedRole, authUsers, authUid } from "drizzle-orm/supabase";
 
 const users = pgSchema("auth").table("users", {
     id: uuid().primaryKey(),
@@ -31,7 +31,7 @@ export const roles = pgEnum("role", [
 export const profiles = pgTable("profiles", {
     profile_id: uuid()
         .primaryKey()
-        .references(() => users.id, { onDelete: "cascade" }),
+        .references(() => authUsers.id, { onDelete: "cascade" }),
     avatar: text(),
     name: text().notNull(),
     username: text().notNull(),
@@ -145,3 +145,34 @@ export const messages = pgTable("messages", {
     content: text().notNull(),
     created_at: timestamp().notNull().defaultNow(),
 });
+
+export const todos = pgTable(
+    "todos",
+    {
+        todo_id: bigint({ mode: "number" })
+            .primaryKey()
+            .generatedAlwaysAsIdentity(),
+        title: text().notNull(),
+        completed: boolean().notNull().default(false),
+        created_at: timestamp().notNull().defaultNow(),
+        profile_id: uuid()
+            .references(() => profiles.profile_id, {
+                onDelete: "cascade",
+            })
+            .notNull(),
+    },
+    (table) => [
+        pgPolicy("todos-insert-policy", {
+            for: "insert",
+            to: authenticatedRole,
+            as: "permissive",
+            withCheck: sql`${authUid} = ${table.profile_id}`,
+        }),
+        pgPolicy("todos-select-policy", {
+            for: "select",
+            to: authenticatedRole,
+            as: "permissive",
+            using: sql`${authUid} = ${table.profile_id}`,
+        }),
+    ]
+);
